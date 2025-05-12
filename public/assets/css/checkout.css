@@ -1,0 +1,246 @@
+.checkout-main {
+    margin-top: 80px;
+    padding: 2rem;
+    min-height: calc(100vh - 80px);
+    background-color: var(--background-color);
+}
+
+.checkout-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    background-color: var(--card-background);
+    border-radius: 8px;
+    box-shadow: 0 2px 4px var(--shadow-color);
+    padding: 2rem;
+}
+
+.checkout-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.checkout-header h2 {
+    color: var(--heading-color);
+    font-size: 2rem;
+    margin-bottom: 2rem;
+}
+
+.checkout-steps {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+
+.step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.step-number {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: var(--border-color);
+    color: var(--text-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+.step.active .step-number {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.step-text {
+    color: var(--text-color);
+    font-size: 0.875rem;
+}
+
+.step.active .step-text {
+    color: var(--primary-color);
+    font-weight: bold;
+}
+
+.step-line {
+    width: 100px;
+    height: 2px;
+    background-color: var(--border-color);
+}
+
+.step.active + .step-line {
+    background-color: var(--primary-color);
+}
+
+.checkout-content {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 2rem;
+}
+
+.order-summary {
+    background-color: var(--background-color);
+    padding: 1.5rem;
+    border-radius: 8px;
+}
+
+.order-summary h3 {
+    color: var(--heading-color);
+    margin-bottom: 1.5rem;
+}
+
+.selected-plan {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.plan-info h4 {
+    color: var(--heading-color);
+    margin-bottom: 0.5rem;
+}
+
+.plan-info p {
+    color: var(--primary-color);
+    font-weight: bold;
+}
+
+.change-plan {
+    padding: 0.5rem 1rem;
+    background: none;
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.change-plan:hover {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.plan-features h4 {
+    color: var(--heading-color);
+    margin-bottom: 1rem;
+}
+
+.plan-features ul {
+    list-style: none;
+}
+
+.plan-features li {
+    margin-bottom: 0.5rem;
+    padding-left: 1.5rem;
+    position: relative;
+}
+
+.plan-features li::before {
+    content: "✓";
+    color: var(--primary-color);
+    position: absolute;
+    left: 0;
+}
+
+.payment-section {
+    padding: 1.5rem;
+}
+
+.payment-section h3 {
+    color: var(--heading-color);
+    margin-bottom: 1.5rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--text-color);
+}
+
+.form-group input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+#card-element {
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    background-color: white;
+}
+
+#card-errors {
+    color: #dc3545;
+    margin-bottom: 1rem;
+    font-size: 0.875rem;
+}
+
+.submit-button {
+    width: 100%;
+    padding: 1rem;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background-color 0.3s;
+}
+
+.submit-button:hover {
+    background-color: #1a9a5d;
+}
+
+.submit-button:disabled {
+    background-color: var(--border-color);
+    cursor: not-allowed;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .checkout-content {
+        grid-template-columns: 1fr;
+    }
+
+    .checkout-steps {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .step-line {
+        width: 2px;
+        height: 50px;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+} 

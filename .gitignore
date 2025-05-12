@@ -1,0 +1,83 @@
+# Environment
+.env
+.env.*  
+!.env.example
+
+# PHP dependencies
+/vendor/
+
+# Node (if you have frontend tooling)
+node_modules/
+bower_components/
+
+# Composer PHAR
+composer.phar
+
+# Cache / logs / temp
+/cache/
+/tmp/
+/temp/
+/logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE / editor
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+*.swp
+*.swo
+
+# Test results
+/tests/
+/__tests__/
+*.test.js
+*.spec.js
+coverage/
+
+# Build output
+/dist/
+/build/
+*.min.js
+*.min.css
+
+# Backups
+*.bak
+*.backup
+*.old
+
+# Database / uploads
+*.sql
+*.sqlite
+*.sqlite3
+*.db
+/uploads/
+/public/uploads/
+
+# Sessions / caching
+/sessions/
+*.sess
+
+# Certificates / keys
+*.pem
+*.key
+*.crt
+*.cer
+*.der
+*.p12
+*.pfx
+
+# Do NOT ignore your main .htaccess—only auto-generated ones:
+# !.htaccess
+
+# Hostinger-specific
+/public_html/tmp/
+/public_html/cache/

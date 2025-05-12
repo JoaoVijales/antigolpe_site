@@ -1,0 +1,112 @@
+-- Criar tabela de logs de segurança
+CREATE TABLE IF NOT EXISTS security_logs (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    type VARCHAR(50) NOT NULL,
+    severity ENUM('info', 'warning', 'error', 'critical') NOT NULL DEFAULT 'info',
+    message TEXT NOT NULL,
+    ip VARCHAR(45) NOT NULL,
+    user_agent VARCHAR(255),
+    request_method VARCHAR(10),
+    request_uri VARCHAR(255),
+    referer VARCHAR(255),
+    context JSON,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX idx_type (type),
+    INDEX idx_severity (severity),
+    INDEX idx_created_at (created_at),
+    INDEX idx_ip (ip)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Criar tabela de configurações de segurança
+CREATE TABLE IF NOT EXISTS security_settings (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    setting_key VARCHAR(50) NOT NULL UNIQUE,
+    setting_value TEXT NOT NULL,
+    description TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX idx_setting_key (setting_key)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Inserir configurações padrão
+INSERT INTO security_settings (setting_key, setting_value, description) VALUES
+('max_login_attempts', '5', 'Número máximo de tentativas de login antes do bloqueio'),
+('login_block_duration', '900', 'Duração do bloqueio em segundos (15 minutos)'),
+('session_lifetime', '3600', 'Tempo de vida da sessão em segundos (1 hora)'),
+('password_min_length', '8', 'Tamanho mínimo da senha'),
+('password_require_special', '1', 'Exigir caracteres especiais na senha'),
+('password_require_numbers', '1', 'Exigir números na senha'),
+('password_require_uppercase', '1', 'Exigir letras maiúsculas na senha'),
+('password_require_lowercase', '1', 'Exigir letras minúsculas na senha'),
+('max_file_size', '5242880', 'Tamanho máximo de upload em bytes (5MB)'),
+('allowed_file_types', 'jpg,jpeg,png,gif,pdf,doc,docx', 'Tipos de arquivo permitidos para upload'),
+('enable_2fa', '0', 'Habilitar autenticação de dois fatores'),
+('enable_csrf_protection', '1', 'Habilitar proteção CSRF'),
+('enable_xss_protection', '1', 'Habilitar proteção XSS'),
+('enable_sql_injection_protection', '1', 'Habilitar proteção contra SQL Injection'),
+('enable_brute_force_protection', '1', 'Habilitar proteção contra força bruta'),
+('enable_file_upload_protection', '1', 'Habilitar proteção de upload de arquivos'),
+('enable_security_headers', '1', 'Habilitar cabeçalhos de segurança'),
+('enable_security_logging', '1', 'Habilitar logging de segurança'),
+('enable_security_alerts', '1', 'Habilitar alertas de segurança'),
+('security_alert_email', 'admin@seusite.com', 'Email para alertas de segurança'),
+('security_alert_slack_webhook', '', 'Webhook do Slack para alertas de segurança'),
+('security_alert_sms_number', '', 'Número de telefone para alertas SMS'),
+('security_alert_webhook_url', '', 'URL do webhook para alertas de segurança');
+
+-- Criar tabela de IPs bloqueados
+CREATE TABLE IF NOT EXISTS blocked_ips (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    ip VARCHAR(45) NOT NULL,
+    reason VARCHAR(255) NOT NULL,
+    blocked_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    expires_at TIMESTAMP NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    UNIQUE KEY uk_ip (ip),
+    INDEX idx_expires_at (expires_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Criar tabela de tentativas de login
+CREATE TABLE IF NOT EXISTS login_attempts (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(255) NOT NULL,
+    ip VARCHAR(45) NOT NULL,
+    attempt_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    success BOOLEAN NOT NULL DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_username_ip (username, ip),
+    INDEX idx_attempt_time (attempt_time)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Criar tabela de atividades suspeitas
+CREATE TABLE IF NOT EXISTS suspicious_activities (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    type VARCHAR(50) NOT NULL,
+    ip VARCHAR(45) NOT NULL,
+    user_agent VARCHAR(255),
+    request_method VARCHAR(10),
+    request_uri VARCHAR(255),
+    details JSON,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_type (type),
+    INDEX idx_ip (ip),
+    INDEX idx_created_at (created_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Criar tabela de ameaças ativas
+CREATE TABLE IF NOT EXISTS active_threats (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    type VARCHAR(50) NOT NULL,
+    ip VARCHAR(45) NOT NULL,
+    count INT UNSIGNED NOT NULL DEFAULT 1,
+    first_seen TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    last_seen TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    details JSON,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX idx_type (type),
+    INDEX idx_ip (ip),
+    INDEX idx_last_seen (last_seen)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; 

@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - AntiGolpe</title>
+    <link rel="stylesheet" href="dashboard.css">
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.x.x/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.x.x/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.x.x/firebase-firestore-compat.js"></script>
+    <!-- Stripe.js -->
+    <script src="https://js.stripe.com/v3/"></script>
+    <!-- Configuração -->
+    <script src="config.php"></script>
+    <script type="module">
+        import config from './config.js';
+        window.appConfig = config;
+    </script>
+</head>
+<body>
+    <header class="dashboard-header">
+        <div class="logo-container">
+            <img src="logo-icon0.png" alt="Logo AntiGolpe" class="logo-icon">
+            <h1>AntiGolpe</h1>
+        </div>
+        <nav class="dashboard-nav">
+            <button class="nav-button active">Dashboard</button>
+            <button class="nav-button">Verificações</button>
+            <button class="nav-button">Configurações</button>
+        </nav>
+        <div class="user-menu">
+            <span class="user-name">Olá, Usuário</span>
+            <button class="logout-button">Sair</button>
+        </div>
+    </header>
+
+    <main class="dashboard-main">
+        <section class="welcome-section">
+            <h2>Bem-vindo ao seu Dashboard</h2>
+            <p>Escolha seu plano para começar a usar o AntiGolpe</p>
+        </section>
+
+        <section class="plans-section">
+            <div class="plan-card">
+                <h3>Plano Básico</h3>
+                <div class="price">R$ 47,90/mês</div>
+                <ul class="features-list">
+                    <li>5 análises por mês</li>
+                    <li>Suporte por email</li>
+                    <li>Acesso básico</li>
+                </ul>
+                <button class="select-plan" data-plan="basic">Selecionar Plano</button>
+            </div>
+
+            <div class="plan-card featured">
+                <div class="featured-tag">Mais Popular</div>
+                <h3>Plano Profissional</h3>
+                <div class="price">R$ 157,90/mês</div>
+                <ul class="features-list">
+                    <li>Análises ilimitadas</li>
+                    <li>Suporte prioritário</li>
+                    <li>Acesso antecipado</li>
+                    <li>Até 3 contas</li>
+                </ul>
+                <button class="select-plan" data-plan="pro">Selecionar Plano</button>
+            </div>
+
+            <div class="plan-card">
+                <h3>Plano Empresarial</h3>
+                <div class="price">A partir de R$ 197,90/mês</div>
+                <ul class="features-list">
+                    <li>Tudo do plano Pro</li>
+                    <li>Personalização</li>
+                    <li>Múltiplos acessos</li>
+                    <li>Suporte dedicado</li>
+                </ul>
+                <button class="select-plan" data-plan="enterprise">Falar com Vendas</button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal de Pagamento -->
+    <div id="paymentModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Finalizar Assinatura</h2>
+            <form id="payment-form">
+                <div id="card-element"></div>
+                <div id="card-errors" role="alert"></div>
+                <button type="submit" id="submit-payment">Pagar Agora</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Inicializar Firebase com a configuração segura
+        firebase.initializeApp(window.appConfig.firebase);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        // Verificar estado da autenticação
+        auth.onAuthStateChanged(function(user) {
+            if (user) {
+                // Usuário está logado
+                document.querySelector('.user-name').textContent = `Olá, ${user.displayName || user.email}`;
+                loadUserSubscription(user.uid);
+            } else {
+                // Usuário não está logado, redirecionar para login
+                window.location.href = 'index.html';
+            }
+        });
+
+        // Função para carregar a assinatura do usuário
+        async function loadUserSubscription(userId) {
+            try {
+                const subscriptionDoc = await db.collection('subscriptions').doc(userId).get();
+                if (subscriptionDoc.exists) {
+                    const subscription = subscriptionDoc.data();
+                    // Atualizar UI para mostrar plano atual
+                    updateUIForCurrentPlan(subscription.plan);
+                }
+            } catch (error) {
+                console.error('Erro ao carregar assinatura:', error);
+            }
+        }
+
+        // Função para atualizar UI baseado no plano atual
+        function updateUIForCurrentPlan(planId) {
+            const planCards = document.querySelectorAll('.plan-card');
+            planCards.forEach(card => {
+                const cardPlanId = card.querySelector('.select-plan').dataset.plan;
+                if (cardPlanId === planId) {
+                    card.classList.add('current-plan');
+                    const button = card.querySelector('.select-plan');
+                    button.textContent = 'Plano Atual';
+                    button.disabled = true;
+                }
+            });
+        }
+
+        // Configuração dos planos
+        const plans = {
+            basic: {
+                name: 'Plano Básico',
+                price: '47,90',
+                features: [
+                    'Análise limitada: 5/mês',
+                    'Sem prioridade de tempo'
+                ]
+            },
+            pro: {
+                name: 'Plano Profissional',
+                price: '157,90',
+                features: [
+                    'Análises ilimitadas',
+                    'Suporte prioritário',
+                    'Acesso antecipado e gratuito a novas funcionalidades',
+                    'Até 3 contas diferentes'
+                ]
+            },
+            enterprise: {
+                name: 'Plano Empresarial',
+                price: '197,90',
+                features: [
+                    'Tudo do Plano Profissional',
+                    'Personalize conforme sua necessidade',
+                    'Múltiplos acessos para sua equipe'
+                ]
+            }
+        };
+
+        // Função para redirecionar para o checkout com o plano selecionado
+        function redirectToCheckout(planId) {
+            const user = auth.currentUser;
+            if (!user) {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            // Salvar o plano selecionado no localStorage
+            localStorage.setItem('selectedPlan', JSON.stringify(plans[planId]));
+            // Redirecionar para a página de checkout
+            window.location.href = 'checkout.html';
+        }
+
+        // Adicionar event listeners aos botões de plano
+        document.querySelectorAll('.select-plan').forEach(button => {
+            button.addEventListener('click', function() {
+                const planId = this.dataset.plan;
+                redirectToCheckout(planId);
+            });
+        });
+
+        // Logout
+        document.querySelector('.logout-button').addEventListener('click', function() {
+            auth.signOut().then(() => {
+                window.location.href = 'index.html';
+            }).catch((error) => {
+                console.error('Erro ao fazer logout:', error);
+            });
+        });
+
+        // Inicialização do Stripe com a chave segura
+        const stripe = Stripe(window.appConfig.stripe.publishableKey);
+        const elements = stripe.elements();
+        const card = elements.create('card');
+        card.mount('#card-element');
+
+        // Manipulação de erros do cartão
+        card.addEventListener('change', function(event) {
+            const displayError = document.getElementById('card-errors');
+            if (event.error) {
+                displayError.textContent = event.error.message;
+            } else {
+                displayError.textContent = '';
+            }
+        });
+
+        // Manipulação do formulário de pagamento
+        const form = document.getElementById('payment-form');
+        form.addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            const {token, error} = await stripe.createToken(card);
+
+            if (error) {
+                const errorElement = document.getElementById('card-errors');
+                errorElement.textContent = error.message;
+            } else {
+                // Enviar token para seu servidor
+                stripeTokenHandler(token);
+            }
+        });
+
+        function stripeTokenHandler(token) {
+            // Aqui você enviaria o token para seu servidor
+            console.log('Token:', token);
+            // Exemplo de envio para servidor:
+            // fetch('/process-payment', {
+            //     method: 'POST',
+            //     headers: {'Content-Type': 'application/json'},
+            //     body: JSON.stringify({token: token.id})
+            // });
+        }
+
+        // Fechar modal
+        document.querySelector('.close-modal').addEventListener('click', function() {
+            document.getElementById('paymentModal').style.display = 'none';
+        });
+
+        // Fechar modal ao clicar fora
+        window.addEventListener('click', function(event) {
+            const modal = document.getElementById('paymentModal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html> 

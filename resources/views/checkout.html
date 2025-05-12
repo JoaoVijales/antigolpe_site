@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finalizar Compra - AntiGolpe</title>
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="checkout.css">
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.x.x/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.x.x/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.x.x/firebase-firestore-compat.js"></script>
+    <!-- Stripe.js -->
+    <script src="https://js.stripe.com/v3/"></script>
+</head>
+<body>
+    <header class="dashboard-header">
+        <div class="logo-container">
+            <img src="logo-icon0.png" alt="Logo AntiGolpe" class="logo-icon">
+            <h1>AntiGolpe</h1>
+        </div>
+        <div class="user-menu">
+            <span class="user-name">Olá, Usuário</span>
+            <button class="logout-button">Sair</button>
+        </div>
+    </header>
+
+    <main class="checkout-main">
+        <div class="checkout-container">
+            <div class="checkout-header">
+                <h2>Finalizar Compra</h2>
+                <div class="checkout-steps">
+                    <div class="step active">
+                        <span class="step-number">1</span>
+                        <span class="step-text">Plano</span>
+                    </div>
+                    <div class="step-line"></div>
+                    <div class="step active">
+                        <span class="step-number">2</span>
+                        <span class="step-text">Pagamento</span>
+                    </div>
+                    <div class="step-line"></div>
+                    <div class="step">
+                        <span class="step-number">3</span>
+                        <span class="step-text">Confirmação</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="checkout-content">
+                <div class="order-summary">
+                    <h3>Resumo do Pedido</h3>
+                    <div class="selected-plan">
+                        <div class="plan-info">
+                            <h4 id="plan-name">Plano Profissional</h4>
+                            <p id="plan-price">R$ 157,90/mês</p>
+                        </div>
+                        <button class="change-plan">Alterar Plano</button>
+                    </div>
+                    <div class="plan-features">
+                        <h4>Benefícios Inclusos:</h4>
+                        <ul id="plan-features-list">
+                            <li>Análises ilimitadas</li>
+                            <li>Suporte prioritário</li>
+                            <li>Acesso antecipado</li>
+                            <li>Até 3 contas</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="payment-section">
+                    <h3>Informações de Pagamento</h3>
+                    <form id="payment-form">
+                        <div class="form-group">
+                            <label for="card-name">Nome no Cartão</label>
+                            <input type="text" id="card-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="card-element">Número do Cartão</label>
+                            <div id="card-element"></div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="card-expiry">Data de Expiração</label>
+                                <input type="text" id="card-expiry" placeholder="MM/AA" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="card-cvc">CVC</label>
+                                <input type="text" id="card-cvc" placeholder="123" required>
+                            </div>
+                        </div>
+                        <div id="card-errors" role="alert"></div>
+                        <button type="submit" id="submit-payment" class="submit-button">
+                            <span>Finalizar Pagamento</span>
+                            <span class="price">R$ 157,90</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Configuração do Firebase
+        const firebaseConfig = {
+            // Suas configurações do Firebase aqui
+            apiKey: "sua_api_key",
+            authDomain: "seu_auth_domain",
+            projectId: "seu_project_id",
+            storageBucket: "seu_storage_bucket",
+            messagingSenderId: "seu_messaging_sender_id",
+            appId: "seu_app_id"
+        };
+
+        // Inicializar Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        // Verificar estado da autenticação
+        auth.onAuthStateChanged(function(user) {
+            if (!user) {
+                // Usuário não está logado, redirecionar para login
+                window.location.href = 'index.html';
+            }
+        });
+
+        // Carregar o plano selecionado
+        function loadSelectedPlan() {
+            const user = auth.currentUser;
+            if (!user) {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            const selectedPlan = JSON.parse(localStorage.getItem('selectedPlan'));
+            if (!selectedPlan) {
+                // Se não houver plano selecionado, redirecionar para o dashboard
+                window.location.href = 'dashboard.html';
+                return;
+            }
+
+            // Atualizar as informações do plano na página
+            document.getElementById('plan-name').textContent = selectedPlan.name;
+            document.getElementById('plan-price').textContent = `R$ ${selectedPlan.price}/mês`;
+            
+            // Atualizar a lista de benefícios
+            const featuresList = document.getElementById('plan-features-list');
+            featuresList.innerHTML = '';
+            selectedPlan.features.forEach(feature => {
+                const li = document.createElement('li');
+                li.textContent = feature;
+                featuresList.appendChild(li);
+            });
+
+            // Atualizar o preço no botão de pagamento
+            document.querySelector('.submit-button .price').textContent = `R$ ${selectedPlan.price}`;
+        }
+
+        // Carregar o plano ao iniciar a página
+        loadSelectedPlan();
+
+        // Inicialização do Stripe
+        const stripe = Stripe('seu_publishable_key');
+        const elements = stripe.elements();
+        const card = elements.create('card', {
+            style: {
+                base: {
+                    fontSize: '16px',
+                    color: '#32325d',
+                    fontFamily: '"SegoeUi-Regular", sans-serif',
+                    '::placeholder': {
+                        color: '#aab7c4'
+                    }
+                },
+                invalid: {
+                    color: '#dc3545',
+                    iconColor: '#dc3545'
+                }
+            }
+        });
+        card.mount('#card-element');
+
+        // Manipulação de erros do cartão
+        card.addEventListener('change', function(event) {
+            const displayError = document.getElementById('card-errors');
+            if (event.error) {
+                displayError.textContent = event.error.message;
+            } else {
+                displayError.textContent = '';
+            }
+        });
+
+        // Manipulação do formulário de pagamento
+        const form = document.getElementById('payment-form');
+        form.addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            const user = auth.currentUser;
+            if (!user) {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            const submitButton = document.getElementById('submit-payment');
+            submitButton.disabled = true;
+            submitButton.textContent = 'Processando...';
+
+            const {token, error} = await stripe.createToken(card);
+
+            if (error) {
+                const errorElement = document.getElementById('card-errors');
+                errorElement.textContent = error.message;
+                submitButton.disabled = false;
+                submitButton.innerHTML = '<span>Finalizar Pagamento</span><span class="price">R$ ' + JSON.parse(localStorage.getItem('selectedPlan')).price + '</span>';
+            } else {
+                // Processar pagamento
+                await processPayment(token, user.uid);
+            }
+        });
+
+        async function processPayment(token, userId) {
+            try {
+                const selectedPlan = JSON.parse(localStorage.getItem('selectedPlan'));
+                
+                // Aqui você enviaria o token para seu servidor para processar o pagamento
+                // Exemplo de envio para servidor:
+                // const response = await fetch('/process-payment', {
+                //     method: 'POST',
+                //     headers: {'Content-Type': 'application/json'},
+                //     body: JSON.stringify({
+                //         token: token.id,
+                //         plan: selectedPlan.name,
+                //         price: selectedPlan.price,
+                //         userId: userId
+                //     })
+                // });
+
+                // Simular processamento bem-sucedido
+                await new Promise(resolve => setTimeout(resolve, 2000));
+
+                // Salvar assinatura no Firestore
+                await db.collection('subscriptions').doc(userId).set({
+                    plan: selectedPlan.name,
+                    price: selectedPlan.price,
+                    features: selectedPlan.features,
+                    startDate: firebase.firestore.FieldValue.serverTimestamp(),
+                    status: 'active'
+                });
+
+                // Limpar localStorage
+                localStorage.removeItem('selectedPlan');
+
+                // Redirecionar para página de sucesso
+                window.location.href = 'success.html';
+            } catch (error) {
+                console.error('Erro ao processar pagamento:', error);
+                const errorElement = document.getElementById('card-errors');
+                errorElement.textContent = 'Erro ao processar pagamento. Por favor, tente novamente.';
+                const submitButton = document.getElementById('submit-payment');
+                submitButton.disabled = false;
+                submitButton.innerHTML = '<span>Finalizar Pagamento</span><span class="price">R$ ' + JSON.parse(localStorage.getItem('selectedPlan')).price + '</span>';
+            }
+        }
+
+        // Botão de alterar plano
+        document.querySelector('.change-plan').addEventListener('click', function() {
+            window.location.href = 'dashboard.html';
+        });
+
+        // Limpar o plano selecionado ao sair da página
+        window.addEventListener('beforeunload', function() {
+            localStorage.removeItem('selectedPlan');
+        });
+    </script>
+</body>
+</html> 

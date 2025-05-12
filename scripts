@@ -1,0 +1,34 @@
+#!/bin/bash
+
+# Verificar se o script está sendo executado como root
+if [ "$EUID" -ne 0 ]; then
+    echo "Este script precisa ser executado como root"
+    exit 1
+fi
+
+# Obter o diretório do script
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+
+# Criar o arquivo de log se não existir
+mkdir -p "$SCRIPT_DIR/logs"
+touch "$SCRIPT_DIR/logs/security.log"
+chmod 644 "$SCRIPT_DIR/logs/security.log"
+
+# Configurar permissões dos arquivos
+chmod 644 "$SCRIPT_DIR/security_cron.php"
+chmod 644 "$SCRIPT_DIR/Logger.php"
+chmod 644 "$SCRIPT_DIR/Database.php"
+chmod 644 "$SCRIPT_DIR/SecurityDashboard.php"
+chmod 644 "$SCRIPT_DIR/SecurityAlert.php"
+chmod 644 "$SCRIPT_DIR/SecurityMonitor.php"
+
+# Adicionar o cron job para executar a cada hora
+(crontab -l 2>/dev/null; echo "0 * * * * php $SCRIPT_DIR/security_cron.php >> $SCRIPT_DIR/logs/cron.log 2>&1") | crontab -
+
+# Adicionar o cron job para limpar logs antigos (executa diariamente à meia-noite)
+(crontab -l 2>/dev/null; echo "0 0 * * * find $SCRIPT_DIR/logs -name 'security_report_*.txt' -mtime +30 -delete") | crontab -
+
+echo "Cron jobs configurados com sucesso!"
+echo "Os logs serão salvos em: $SCRIPT_DIR/logs/"
+echo "O relatório de segurança será gerado diariamente"
+echo "Os logs antigos serão limpos automaticamente após 30 dias" 

@@ -1,0 +1,207 @@
+<?php
+// Carrega o autoloader do Composer
+require_once __DIR__ . '/../vendor/autoload.php';
+
+use App\Services\Logger;
+use App\Utils\Database;
+use App\Services\SecurityDashboard;
+use App\Services\SecurityAlert;
+use App\Services\SecurityMonitor;
+use App\Security\BruteForceProtection;
+use App\Security\FileUploadSecurity;
+
+// Configurar timezone
+date_default_timezone_set('America/Sao_Paulo');
+
+// Inicializar objetos
+$logger = new Logger('logs/security.log');
+$db = new Database();
+$dashboard = new SecurityDashboard($logger, $db);
+$alert = new SecurityAlert($logger);
+$monitor = new SecurityMonitor($logger);
+$bruteForce = new BruteForceProtection();
+$fileUpload = new FileUploadSecurity();
+
+// Função para verificar a saúde do sistema
+function checkSystemHealth($dashboard, $alert) {
+    $health = $dashboard->getSystemHealth();
+    $issues = [];
+
+    // Verificar versão do PHP
+    if (version_compare($health['php_version'], '7.4.0', '<')) {
+        $issues[] = [
+            'type' => 'system',
+            'severity' => 'warning',
+            'message' => 'Versão do PHP desatualizada: ' . $health['php_version']
+        ];
+    }
+
+    // Verificar configurações de segurança
+    $config = $dashboard->getSecurityConfig();
+    foreach ($config['security_headers'] as $header => $value) {
+        if (!$value) {
+            $issues[] = [
+                'type' => 'security_header',
+                'severity' => 'warning',
+                'message' => 'Cabeçalho de segurança não configurado: ' . $header
+            ];
+        }
+    }
+
+    // Verificar permissões de arquivos
+    foreach ($config['file_permissions'] as $file => $perms) {
+        if (substr($perms['permissions'], -3) !== '644' && substr($perms['permissions'], -3) !== '640') {
+            $issues[] = [
+                'type' => 'file_permission',
+                'severity' => 'warning',
+                'message' => 'Permissões incorretas no arquivo: ' . $file . ' (' . $perms['permissions'] . ')'
+            ];
+        }
+    }
+
+    // Enviar alertas se houver problemas
+    if (!empty($issues)) {
+        foreach ($issues as $issue) {
+            $alert->triggerAlert('system_health', [
+                'type' => $issue['type'],
+                'severity' => $issue['severity'],
+                'message' => $issue['message']
+            ]);
+        }
+    }
+
+    return $issues;
+}
+
+// Função para verificar ameaças ativas
+function checkActiveThreats($dashboard, $alert) {
+    $threats = $dashboard->getSecurityMetrics()['active_threats'];
+    
+    foreach ($threats as $threat) {
+        if ($threat['count'] > 10) {
+            $alert->triggerAlert('active_threat', [
+                'type' => $threat['type'],
+                'count' => $threat['count'],
+                'last_seen' => $threat['last_seen']
+            ]);
+        }
+    }
+
+    return $threats;
+}
+
+// Função para verificar IPs bloqueados
+function checkBlockedIPs($dashboard, $alert) {
+    $blocked = $dashboard->getSecurityMetrics()['blocked_ips'];
+    
+    foreach ($blocked as $ip) {
+        if (strtotime($ip['expires_at']) < time()) {
+            // IP ainda está bloqueado após o tempo de expiração
+            $alert->triggerAlert('blocked_ip_expired', [
+                'ip' => $ip['ip'],
+                'reason' => $ip['reason'],
+                'blocked_at' => $ip['blocked_at'],
+                'expires_at' => $ip['expires_at']
+            ]);
+        }
+    }
+
+    return $blocked;
+}
+
+// Função para verificar falhas de login
+function checkFailedLogins($dashboard, $alert) {
+    $failed = $dashboard->getSecurityMetrics()['failed_logins'];
+    
+    foreach ($failed as $login) {
+        if ($login['attempts'] >= 5) {
+            $alert->triggerAlert('failed_login', [
+                'username' => $login['username'],
+                'attempts' => $login['attempts'],
+                'last_attempt' => $login['last_attempt'],
+                'ip' => $login['ip']
+            ]);
+        }
+    }
+
+    return $failed;
+}
+
+// Função para limpar logs antigos
+function cleanupOldLogs($db) {
+    $query = "DELETE FROM security_logs WHERE created_at < DATE_SUB(NOW(), INTERVAL 30 DAY)";
+    $db->query($query);
+    
+    $query = "DELETE FROM login_attempts WHERE attempt_time < DATE_SUB(NOW(), INTERVAL 7 DAY)";
+    $db->query($query);
+    
+    $query = "DELETE FROM suspicious_activities WHERE created_at < DATE_SUB(NOW(), INTERVAL 7 DAY)";
+    $db->query($query);
+    
+    $query = "DELETE FROM active_threats WHERE last_seen < DATE_SUB(NOW(), INTERVAL 7 DAY)";
+    $db->query($query);
+}
+
+// Função para gerar relatório
+function generateReport($issues, $threats, $blocked, $failed) {
+    $report = "Relatório de Segurança - " . date('Y-m-d H:i:s') . "\n\n";
+    
+    if (!empty($issues)) {
+        $report .= "Problemas de Sistema:\n";
+        foreach ($issues as $issue) {
+            $report .= "- {$issue['message']}\n";
+        }
+        $report .= "\n";
+    }
+    
+    if (!empty($threats)) {
+        $report .= "Ameaças Ativas:\n";
+        foreach ($threats as $threat) {
+            $report .= "- {$threat['type']}: {$threat['count']} ocorrências\n";
+        }
+        $report .= "\n";
+    }
+    
+    if (!empty($blocked)) {
+        $report .= "IPs Bloqueados:\n";
+        foreach ($blocked as $ip) {
+            $report .= "- {$ip['ip']}: {$ip['reason']}\n";
+        }
+        $report .= "\n";
+    }
+    
+    if (!empty($failed)) {
+        $report .= "Falhas de Login:\n";
+        foreach ($failed as $login) {
+            $report .= "- {$login['username']}: {$login['attempts']} tentativas\n";
+        }
+    }
+    
+    return $report;
+}
+
+// Executar verificações
+try {
+    $logger->info("Iniciando verificações de segurança");
+    
+    $issues = checkSystemHealth($dashboard, $alert);
+    $threats = checkActiveThreats($dashboard, $alert);
+    $blocked = checkBlockedIPs($dashboard, $alert);
+    $failed = checkFailedLogins($dashboard, $alert);
+    
+    // Limpar logs antigos
+    cleanupOldLogs($db);
+    
+    // Gerar e salvar relatório
+    $report = generateReport($issues, $threats, $blocked, $failed);
+    file_put_contents('logs/security_report_' . date('Y-m-d') . '.txt', $report);
+    
+    $logger->info("Verificações de segurança concluídas");
+} catch (Exception $e) {
+    $logger->error("Erro durante as verificações de segurança: " . $e->getMessage());
+    $alert->triggerAlert('security_check_error', [
+        'error' => $e->getMessage(),
+        'trace' => $e->getTraceAsString()
+    ]);
+}
+?> 

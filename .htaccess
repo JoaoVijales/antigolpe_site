@@ -1,0 +1,32 @@
+# Ativar o motor de reescrita
+RewriteEngine On
+
+# Definir o diretório base
+RewriteBase /
+
+# Permitir acesso por padrão
+Require all granted
+
+# Permitir acesso sem referrer
+SetEnvIf Origin "^$" ORIGIN=$http_origin
+Header set Access-Control-Allow-Origin "%{ORIGIN}e" env=ORIGIN
+Header set Access-Control-Allow-Credentials true
+
+# Redireciona para a pasta public
+RewriteCond %{REQUEST_URI} !^/public/
+RewriteRule ^(.*)$ public/$1 [L]
+
+# Proteger apenas arquivos sensíveis
+<FilesMatch "^(\.env|\.git|\.htaccess|composer\.(json|lock)|package(-lock)?\.json|README\.md|LICENSE)$">
+    Require all denied
+</FilesMatch>
+
+# Proteger apenas diretórios sensíveis
+<DirectoryMatch "^(\.git|\.github|\.vscode|node_modules|vendor)/.*$">
+    Require all denied
+</DirectoryMatch>
+
+# Configurações adicionais para a Hostinger
+Options -Indexes
+Options +FollowSymLinks
+AllowOverride All 
