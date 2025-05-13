@@ -30,7 +30,6 @@ use App\Utils\Database;
 use App\Services\SecurityDashboard;
 use App\Utils\PageStats;
 use App\Services\GoogleAnalytics;
-use App\Security\BruteForceProtection;
 use App\Security\FileUploadSecurity;
 
 try {
@@ -53,7 +52,6 @@ try {
     $securityDashboard = new SecurityDashboard($logger, $db);
 
     // Inicializa proteções de segurança
-    $bruteForce = new BruteForceProtection();
     $fileUpload = new FileUploadSecurity();
 
     // Roteamento básico
