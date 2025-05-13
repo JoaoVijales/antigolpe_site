@@ -20,7 +20,6 @@
             "App\\Security\\": "app/Security/"
         },
         "files": [
-            "app/Security/autoload.php"
         ]
     },
     "autoload-dev": {
