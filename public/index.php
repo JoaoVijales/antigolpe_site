@@ -61,7 +61,10 @@ try {
     switch ($route) {
         case '/':
             // Página inicial
-            $indexHtmlContent = file_get_contents(ROOT_PATH . '/resources/views/index.html');
+            ob_start();
+            require ROOT_PATH . '/resources/views/index.html';
+            $indexHtmlContent = ob_get_clean();
+
             $gaTrackingCode = $ga->getTrackingCode();
             $headEndPosition = strpos($indexHtmlContent, '</head>');
             if ($headEndPosition !== false) {
