@@ -61,7 +61,17 @@ try {
     switch ($route) {
         case '/':
             // Página inicial
-            require ROOT_PATH . '/resources/views/index.html';
+            $indexHtmlContent = file_get_contents(ROOT_PATH . '/resources/views/index.html');
+            $gaTrackingCode = $ga->getTrackingCode();
+            $headEndPosition = strpos($indexHtmlContent, '</head>');
+            if ($headEndPosition !== false) {
+                $outputContent = substr_replace($indexHtmlContent, $gaTrackingCode . '</head>', $headEndPosition, strlen('</head>'));
+                echo $outputContent;
+            } else {
+                // Se </head> não for encontrado, apenas inclua o conteúdo (menos ideal)
+                echo $indexHtmlContent;
+                echo $gaTrackingCode;
+            }
             break;
             
         case '/dashboard':
@@ -69,7 +79,23 @@ try {
             $pageStatsData = $pageStats->getPageStats();
             $totalStats = $pageStats->getTotalStats();
             $metrics = $securityDashboard->getSecurityMetrics();
+
+            // Captura o output do arquivo PHP do dashboard
+            ob_start();
             require ROOT_PATH . '/resources/views/dashboard/security.php';
+            $dashboardHtmlContent = ob_get_clean();
+
+            $gaTrackingCode = $ga->getTrackingCode();
+            $headEndPosition = strpos($dashboardHtmlContent, '</head>');
+
+            if ($headEndPosition !== false) {
+                $outputContent = substr_replace($dashboardHtmlContent, $gaTrackingCode . '</head>', $headEndPosition, strlen('</head>'));
+                echo $outputContent;
+            } else {
+                // Se </head> não for encontrado, apenas inclua o conteúdo (menos ideal)
+                echo $dashboardHtmlContent;
+                echo $gaTrackingCode;
+            }
             break;
             
         default:
@@ -77,10 +103,6 @@ try {
             require ROOT_PATH . '/resources/views/404.php';
             break;
     }
-
-    // Adiciona o código de rastreamento do GA antes do fechamento do </head>
-    $gaTrackingCode = $ga->getTrackingCode();
-    echo $gaTrackingCode;
 } catch (\Exception $e) {
     // Log do erro
     $logger->error("Erro na aplicação: " . $e->getMessage());
