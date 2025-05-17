@@ -3,6 +3,11 @@
  * Ponto de entrada principal da aplicação
  */
 
+require __DIR__ . '/../vendor/autoload.php';
+
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
+$dotenv->load();
+
 // Define o diretório raiz da aplicação
 define('ROOT_PATH', dirname(__DIR__));
 
@@ -13,13 +18,6 @@ error_reporting(E_ALL);
 
 // Define modo de debug
 define('APP_DEBUG', true);
-
-// Carrega o autoloader do Composer
-$autoloader = ROOT_PATH . '/vendor/autoload.php';
-if (!file_exists($autoloader)) {
-    die('Composer autoloader não encontrado. Execute "composer install" primeiro.');
-}
-require_once $autoloader;
 
 // Carrega as configurações
 require_once ROOT_PATH . '/app/config/database.php';
