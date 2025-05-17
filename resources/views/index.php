@@ -1,3 +1,10 @@
+
+
+
+
+
+
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -467,14 +474,16 @@
   <script>
 
        // Your web app's Firebase configuration
-       const firebaseConfig = {
-      apiKey: "<?php echo getenv('FIREBASE_API_KEY'); ?>",
-      authDomain: "<?php echo getenv('FIREBASE_AUTH_DOMAIN'); ?>",
-      projectId: "<?php echo getenv('FIREBASE_PROJECT_ID'); ?>",
-      storageBucket: "<?php echo getenv('FIREBASE_STORAGE_BUCKET'); ?>",
-      messagingSenderId: "<?php echo getenv('FIREBASE_MESSAGING_SENDER_ID'); ?>",
-      appId: "<?php echo getenv('FIREBASE_APP_ID'); ?>"
+    const firebaseConfig = {
+      apiKey: <?= json_encode(getenv('FIREBASE_API_KEY')); ?>,
+      authDomain: <?= json_encode(getenv('FIREBASE_AUTH_DOMAIN')); ?>,
+      projectId: <?= json_encode(getenv('FIREBASE_PROJECT_ID')); ?>,
+      storageBucket: <?= json_encode(getenv('FIREBASE_STORAGE_BUCKET')); ?>,
+      messagingSenderId: <?= json_encode(getenv('FIREBASE_MESSAGING_SENDER_ID')); ?>,
+      appId: <?= json_encode(getenv('FIREBASE_APP_ID')); ?>
     };
+
+
     
 
     // Initialize Firebase

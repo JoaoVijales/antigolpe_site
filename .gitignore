@@ -81,3 +81,6 @@ coverage/
 # Hostinger-specific
 /public_html/tmp/
 /public_html/cache/
+
+# Ignore environment file
+.env
