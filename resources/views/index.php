@@ -1,10 +1,3 @@
-
-
-
-
-
-
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -142,10 +135,6 @@
 
    </style>
   <title>AntiGolpe - Proteção contra golpes online</title>
-
-  <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 </head>
 <body>
   <!-- Popup de Cadastro -->
@@ -472,22 +461,7 @@
   </header>
 
   <script>
-
-       // Your web app's Firebase configuration
-    const firebaseConfig = {
-      apiKey: <?= json_encode(getenv('FIREBASE_API_KEY')); ?>,
-      authDomain: <?= json_encode(getenv('FIREBASE_AUTH_DOMAIN')); ?>,
-      projectId: <?= json_encode(getenv('FIREBASE_PROJECT_ID')); ?>,
-      storageBucket: <?= json_encode(getenv('FIREBASE_STORAGE_BUCKET')); ?>,
-      messagingSenderId: <?= json_encode(getenv('FIREBASE_MESSAGING_SENDER_ID')); ?>,
-      appId: <?= json_encode(getenv('FIREBASE_APP_ID')); ?>
-    };
-
-
-    
-
-    // Initialize Firebase
-    firebase.initializeApp(firebaseConfig);
+    // Animações do Scroll
     // Interatividade do Menu
     let click = false;
     document.querySelectorAll('.nav-link').forEach(link => {
