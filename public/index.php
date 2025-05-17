@@ -60,7 +60,7 @@ try {
         case '/':
             // Página inicial
             ob_start();
-            require ROOT_PATH . '/resources/views/index.html';
+            require ROOT_PATH . '/resources/views/index.php';
             $indexHtmlContent = ob_get_clean();
 
             $gaTrackingCode = $ga->getTrackingCode();
