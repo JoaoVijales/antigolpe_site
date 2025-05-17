@@ -21,6 +21,7 @@ class View {
     }
 
     private static function renderWithLayout(string $content, array $data): string {
+        extract($data);
         ob_start();
         include self::$basePath . 'layouts/base.php';
         return ob_get_clean();
