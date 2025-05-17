@@ -140,18 +140,7 @@
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
   <script>
-    // Your web app's Firebase configuration
-    const firebaseConfig = {
-      apiKey: "<?php echo getenv('FIREBASE_API_KEY'); ?>",
-      authDomain: "<?php echo getenv('FIREBASE_AUTH_DOMAIN'); ?>",
-      projectId: "<?php echo getenv('FIREBASE_PROJECT_ID'); ?>",
-      storageBucket: "<?php echo getenv('FIREBASE_STORAGE_BUCKET'); ?>",
-      messagingSenderId: "<?php echo getenv('FIREBASE_MESSAGING_SENDER_ID'); ?>",
-      appId: "<?php echo getenv('FIREBASE_APP_ID'); ?>"
-    };
-
-    // Initialize Firebase
-    firebase.initializeApp(firebaseConfig);
+ 
 
   </script>
 </head>
@@ -480,6 +469,19 @@
   </header>
 
   <script>
+
+       // Your web app's Firebase configuration
+       const firebaseConfig = {
+      apiKey: "<?php echo getenv('FIREBASE_API_KEY'); ?>",
+      authDomain: "<?php echo getenv('FIREBASE_AUTH_DOMAIN'); ?>",
+      projectId: "<?php echo getenv('FIREBASE_PROJECT_ID'); ?>",
+      storageBucket: "<?php echo getenv('FIREBASE_STORAGE_BUCKET'); ?>",
+      messagingSenderId: "<?php echo getenv('FIREBASE_MESSAGING_SENDER_ID'); ?>",
+      appId: "<?php echo getenv('FIREBASE_APP_ID'); ?>"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
     // Interatividade do Menu
     let click = false;
     document.querySelectorAll('.nav-link').forEach(link => {
