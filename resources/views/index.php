@@ -459,6 +459,8 @@
       </div>
     </footer>
   </header>
+  <!-- No final do <body> -->
+<script type="module" src="/assets/js/main.js"></script>
 
   <script>
     // Animações do Scroll
@@ -625,74 +627,61 @@
       }
     });
 
+    async function apiFetch(path, method = 'GET', body = null, token = null) {
+      const headers = { 'Content-Type': 'application/json' };
+      if (token) headers['Authorization'] = `Bearer ${token}`;
+      const res = await fetch(`/api/${path}`, {
+        method,
+        headers,
+        body: body ? JSON.stringify(body) : null
+      });
+      if (!res.ok) throw await res.json();
+      return res.json();
+    }
+
+    async function login(email, password) {
+      const { idToken } = await apiFetch('/api/firebase/LoginUser.php', 'POST', { 
+          email, 
+          password 
+        });
+      sessionStorage.setItem('idToken', idToken);
+      return idToken;
+    }
+
+    async function register(email, password, name) {
+      const { idToken } = await apiFetch('/app/Api/Firebase/CreateUser.php', 'POST', { email, password, name });
+      sessionStorage.setItem('idToken', idToken);
+      return idToken;
+    }
+
+    async function googleLogin() {
+      const { idToken } = await apiFetch('/api/firebase/google-login', 'POST');
+      sessionStorage.setItem('idToken', idToken);
+      return idToken;
+    }
+
     // Manipulação dos formulários
     document.querySelector('.signup-form').addEventListener('submit', (e) => {
       e.preventDefault();
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
-      
-      // Lógica de cadastro com Firebase
-      firebase.auth().createUserWithEmailAndPassword(email, password)
-        .then((userCredential) => {
-          // Usuário cadastrado e logado com sucesso
-          console.log('Usuário cadastrado e logado:', userCredential.user);
-          alert('Cadastro realizado com sucesso!');
-          closePopups();
-        })
-        .catch((error) => {
-          const errorCode = error.code;
-          const errorMessage = error.message;
-          console.error('Erro no cadastro:', errorCode, errorMessage);
-          alert(`Erro no cadastro: ${errorMessage}`);
-        });
+      const authData = await login(email, pass);
     });
 
     document.querySelector('.login-form').addEventListener('submit', (e) => {
       e.preventDefault();
-      const email = document.getElementById('loginEmail').value;
-      const password = document.getElementById('loginPassword').value;
-
-      // Lógica de login com Firebase
-      firebase.auth().signInWithEmailAndPassword(email, password)
-        .then((userCredential) => {
-          // Usuário logado com sucesso
-          console.log('Usuário logado:', userCredential.user);
-          alert('Login realizado com sucesso!');
-          closePopups();
-        })
-        .catch((error) => {
-          const errorCode = error.code;
-          const errorMessage = error.message;
-          console.error('Erro no login:', errorCode, errorMessage);
-          alert(`Erro no login: ${errorMessage}`);
-        });
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const authData = await register(email, password);
     });
 
-    // Login com Google (Placeholder para Firebase Google Auth)
+    // Login com Google
     document.querySelectorAll('.google-btn').forEach(button => {
       button.addEventListener('click', () => {
-        // Aqui você pode adicionar a lógica de login com Google do Firebase
-        console.log('Login com Google (implementando Firebase Google Auth)');
-
-        const provider = new firebase.auth.GoogleAuthProvider();
-        firebase.auth().signInWithPopup(provider)
-          .then((result) => {
-            // O popup foi fechado e o usuário logou com sucesso
-            const user = result.user;
-            console.log('Usuário logado com Google:', user);
-            alert('Login com Google realizado com sucesso!');
-            closePopups();
-          })
-          .catch((error) => {
-            // Lidar com erros durante o login com Google
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            const email = error.email;
-            const credential = error.credential;
-            console.error('Erro no login com Google:', errorCode, errorMessage, email, credential);
-            alert(`Erro no login com Google: ${errorMessage}`);
-          });
-      });
+        // TODO: Implementar redirecionamento ou chamada à API de backend para login com Google
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const authData = await googleLogin(email, pass);
     });
 
     // Abrir popup de cadastro ao clicar no botão "Começar Agora"

@@ -32,3 +32,17 @@ echo "Cron jobs configurados com sucesso!"
 echo "Os logs serão salvos em: $SCRIPT_DIR/logs/"
 echo "O relatório de segurança será gerado diariamente"
 echo "Os logs antigos serão limpos automaticamente após 30 dias" 
+
+# adicionar variaveis de ambiente
+echo "Adicionando variáveis de ambiente..."
+
+# Ler o arquivo .env e adicionar as variáveis ao arquivo de configuração do PHP
+if [ -f "$SCRIPT_DIR/.env" ]; then
+    echo "Lendo variáveis de ambiente do arquivo .env..."
+    while IFS='=' read -r key value; do
+        if [[ "$key" != "" && "$value" != "" ]]; then
+            echo "Adicionando $key=$value ao arquivo de configuração do PHP..."
+            sed -i "s/define('$key', '');/define('$key', '$value');/" $SCRIPT_DIR/config.php
+        fi
+    done < "$SCRIPT_DIR/.env"
+

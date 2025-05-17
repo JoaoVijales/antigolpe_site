@@ -175,7 +175,7 @@ function validateSecurityHeaders() {
 }
 
 // Inicializar validações de segurança
-function initializeSecurity() {
+function initializeSecurity(): void {
     validateRequestOrigin();
     validateRequestMethod();
     validateContentType();

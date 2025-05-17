@@ -1,6 +1,6 @@
 <?php
 // Configurações do Banco de Dados
-$envFile = __DIR__ . '/../../.env';
+$envFile = dirname(__DIR__, 2) . '/.env';
 $config = [];
 
 if (file_exists($envFile)) {
