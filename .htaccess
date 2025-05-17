@@ -30,3 +30,5 @@ RewriteRule ^(.*)$ public/$1 [L]
 Options -Indexes
 Options +FollowSymLinks
 AllowOverride All 
+
+
