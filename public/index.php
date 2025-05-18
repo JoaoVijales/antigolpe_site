@@ -16,7 +16,10 @@ use App\Middlewares\CorsMiddleware;
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
 $dotenv->safeLoad();
 
-define('APP_ENV', $_ENV['APP_ENV'] ?? 'production');
+// Debug temporário: Verificar se APP_ENV foi carregado
+// echo "APP_ENV carregado: " . ($_ENV['APP_ENV'] ?? 'Não Definido') . "<br>"; // Manter o debug comentado
+
+define('APP_ENV', isset($_ENV['APP_ENV']) ? $_ENV['APP_ENV'] : 'production');
 
 // Configuração de ambiente
 ini_set('display_errors', (APP_ENV === 'development') ? '1' : '0');
