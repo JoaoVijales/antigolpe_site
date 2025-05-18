@@ -5,6 +5,7 @@ if (basename($_SERVER['PHP_SELF']) == basename(__FILE__)) {
 }
 
 // Função para verificar a segurança do ambiente
+// TODO: Refatorar - A lógica de verificação de segurança nesta função (headers, permissões, .env) se sobrepõe a App\Services\SecurityDashboard. Considere mover esta lógica para lá e usar os métodos da classe de serviço.
 function checkSecurity() {
     $checks = array();
     
@@ -42,6 +43,7 @@ function checkSecurity() {
 }
 
 // Função para gerar relatório de segurança
+// TODO: Refatorar - Esta função gera um relatório baseado nas verificações locais. Pode ser consolidada ou usar dados de App\Services\SecurityDashboard se a lógica de verificação for movida.
 function generateSecurityReport() {
     $checks = checkSecurity();
     $report = array();

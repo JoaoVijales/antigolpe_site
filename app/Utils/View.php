@@ -57,4 +57,14 @@ class View {
             return "<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\"><circle cx=\"12\" cy=\"12\" r=\"10\" fill=\"red\"/></svg>"; // Placeholder simples de erro
         }
     }
+
+    public static function image(string $path): string {
+        $imagePath = self::$publicPath . 'assets/images/' . $path;
+        if (file_exists($imagePath)) {
+            return $imagePath;
+        } else {
+            error_log("Image file not found: " . $imagePath);
+            return self::$publicPath . 'assets/images/placeholder.png';
+        }
+    }
 }

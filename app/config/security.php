@@ -56,44 +56,6 @@ function clearSessionData() {
     session_destroy();
 }
 
-// Função para validar token CSRF
-function validateCSRFToken($token) {
-    if (!isset($_SESSION['csrf_token']) || $token !== $_SESSION['csrf_token']) {
-        http_response_code(403);
-        die('Token CSRF inválido');
-    }
-}
-
-// Função para gerar token CSRF
-function generateCSRFToken() {
-    if (!isset($_SESSION['csrf_token'])) {
-        $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
-    }
-    return $_SESSION['csrf_token'];
-}
-
-// Função para validar origem da requisição
-function validateRequestOrigin() {
-    $allowedOrigins = [
-        'https://cyan-stinkbug-337154.hostingersite.com',
-        'http://cyan-stinkbug-337154.hostingersite.com',
-        'https://www.cyan-stinkbug-337154.hostingersite.com',
-        'http://www.cyan-stinkbug-337154.hostingersite.com'
-    ];
-
-    if (isset($_SERVER['HTTP_ORIGIN'])) {
-        if (!in_array($_SERVER['HTTP_ORIGIN'], $allowedOrigins)) {
-            // Removido o bloqueio para debug
-            // http_response_code(403);
-            // die('Origem não permitida');
-        }
-        header('Access-Control-Allow-Origin: ' . $_SERVER['HTTP_ORIGIN']);
-        header('Access-Control-Allow-Credentials: true');
-        header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
-        header('Access-Control-Allow-Headers: Content-Type');
-    }
-}
-
 // Função para validar método da requisição
 function validateRequestMethod($allowedMethods = ['GET', 'POST']) {
     if (!in_array($_SERVER['REQUEST_METHOD'], $allowedMethods)) {
@@ -176,7 +138,6 @@ function validateSecurityHeaders() {
 
 // Inicializar validações de segurança
 function initializeSecurity(): void {
-    validateRequestOrigin();
     validateRequestMethod();
     validateContentType();
     validateRequestSize();

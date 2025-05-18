@@ -1,3 +1,4 @@
+<?php // TODO: Refatorar/Remover - Este arquivo parece ser uma versão estática ou não utilizada da página inicial. Ele duplica a estrutura de layout, meta tags, CSS e o HTML de vários componentes (header, popups, hero, features, etc.) que já existem em layouts/base.php e no diretório components/. Se não houver um uso específico para este arquivo fora do sistema de views principal, ele pode ser removido para eliminar duplicação massiva. ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>

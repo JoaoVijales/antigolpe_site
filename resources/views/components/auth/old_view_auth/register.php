@@ -1,19 +1,21 @@
 <?php use App\Utils\View; /** @var array $errors */ ?>
-<div id="loginPopup" class="popup">
+<div id="signupPopup" class="popup">
   <div class="popup-content">
+    <?php // TODO: Refatorar - A estrutura externa deste popup (classes .popup, .popup-content, .close-popup, .popup-title, .divider, .google-btn, .login-link/signup-link) é duplicada em login_form.php e forgot_password.php. Considerar criar um componente de popup genérico ou auth_popup_container para reutilizar esta estrutura.
+     ?>
     <button class="close-popup" aria-label="Fechar popup">&times;</button>
-    <h2 class="popup-title">Fazer Login</h2>
+    <h2 class="popup-title"><?= View::translate('auth.create_account') ?></h2>
     
     <button class="google-btn">
       <img src="https://www.google.com/favicon.ico" alt="Ícone do Google" class="google-icon">
-      <span>Continuar com Google</span>
+      <span><?= View::translate('auth.continue_google') ?></span>
     </button>
     
     <div class="divider">
-      <span>ou</span>
+      <span><?= View::translate('auth.or') ?></span>
     </div>
     
-    <form class="login-form" method="POST" action="/api/auth/login">
+    <form class="signup-form" method="POST" action="/api/auth/register">
       <input type="hidden" name="csrf_token" value="<?= View::escape($_SESSION['csrf_token'] ?? '') ?>">
       
       <?php if (!empty($errors['global'])): ?>
@@ -21,37 +23,44 @@
       <?php endif; ?>
 
       <div class="form-group">
-        <label for="loginEmail">Email</label>
+        <label for="email"><?= View::translate('auth.email') ?></label>
         <input 
           type="email" 
-          id="loginEmail" 
+          id="email" 
           name="email" 
           required
+          autocomplete="email"
           value="<?= View::escape($_POST['email'] ?? '') ?>"
         >
         <?php if (!empty($errors['email'])): ?>
           <div class="form-error"><?= View::escape($errors['email']) ?></div>
         <?php endif; ?>
       </div>
-      
+
       <div class="form-group">
-        <label for="loginPassword">Senha</label>
+        <label for="password"><?= View::translate('auth.password') ?></label>
         <input 
           type="password" 
-          id="loginPassword" 
+          id="password" 
           name="password" 
           required
+          autocomplete="new-password"
         >
         <?php if (!empty($errors['password'])): ?>
           <div class="form-error"><?= View::escape($errors['password']) ?></div>
         <?php endif; ?>
       </div>
 
-      <button type="submit" class="submit-btn">Entrar</button>
+      <div class="form-actions">
+        <button type="submit" class="submit-btn">
+          <?= View::translate('auth.create_account') ?>
+        </button>
+      </div>
     </form>
     
-    <p class="signup-link">
-      Não tem uma conta? <a href="#" id="showSignup">Criar conta</a>
+    <p class="login-link">
+      <?= View::translate('auth.have_account') ?> 
+      <a href="#" id="showLogin"><?= View::translate('auth.login') ?></a>
     </p>
   </div>
 </div>

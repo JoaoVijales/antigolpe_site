@@ -1,6 +1,8 @@
 <?php use App\Utils\View; /** @var array $errors */ ?>
 <div id="forgotPasswordPopup" class="popup">
   <div class="popup-content">
+    <?php // TODO: Refatorar - A estrutura externa deste popup (classes .popup, .popup-content, .close-popup, .popup-title, .divider, .login-link) é duplicada em login_form.php e register.php. Considerar criar um componente de popup genérico ou auth_popup_container para reutilizar esta estrutura.
+     ?>
     <button class="close-popup" aria-label="Fechar popup">&times;</button>
     <h2 class="popup-title"><?= View::translate('auth.reset_password') ?></h2>
     

@@ -9,6 +9,7 @@ abstract class AuthController {
     protected SessionService $session;
     protected ValidationService $validator;
     
+    // TODO: Verificar se outros controllers de autenticação (EmailAuthController, GoogleAuthController) deveriam herdar desta classe base para compartilhar funcionalidades como respondWithToken ou outras lógicas comuns.
     public function __construct(
         SessionService $session,
         ValidationService $validator

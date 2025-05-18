@@ -1,6 +1,7 @@
 <?php use App\Utils\View; ?>
 <?php
 /** @var array $item */
+// TODO: Refatorar - O nome deste arquivo (pricing.php) está incorreto, o conteúdo é um componente de item de FAQ. Além disso, o conteúdo é muito similar a components/ui/faq_item.php. Considere consolidar em um único componente de item de FAQ e corrigir a nomeação.
 ?>
 <details class="faq-content">
   <summary class="faq-title">

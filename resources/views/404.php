@@ -1,3 +1,5 @@
+<?php // TODO: Refatorar - Esta view de erro não utiliza o layout base (layouts/base.php) e contém estilos CSS inline. Refatorar para usar o layout base e mover os estilos para um arquivo CSS externo para consistência e manutenção.
+ ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>

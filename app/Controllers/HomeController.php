@@ -16,11 +16,71 @@ class HomeController {
             ],
             'features' => [
                 [
-                    'icon' => 'icons/analysis.svg',
+                    'icon' => 'icons/anlize-icon0.svg',
                     'title' => 'Análise em tempo real',
+                    'animation' => 'left'
+                ],
+                [
+                    'icon' => 'icons/play-icon0.svg',
+                    'title' => 'Cobertura ampla de anúncios',
+                    'animation' => 'right'
+                ],
+                [
+                    'icon' => 'icons/note-icon0.svg',
+                    'title' => 'Relatório detalhado do risco',
+                    'animation' => 'left'
+                ],
+                [
+                    'icon' => 'icons/menssage-icon0.svg',
+                    'title' => 'Integração simples via WhatsApp',
+                    'animation' => 'right'
+                ],
+                [
+                    'icon' => 'icons/database-icon0.svg',
+                    'title' => 'Histórico de verificações',
                     'animation' => 'left'
                 ]
             ],
+
+            'plans' => [
+                [
+                    'id' => 'basic',
+                    'name' => 'Básico',
+                    'price' => '47,90',
+                    'benefits' => [
+                        ['text' => '5 análises por mês'],
+                        ['text' => 'Suporte por email']
+                    ],
+                    'button_text' => 'Selecionar Plano',
+                    'highlight' => false
+                ],
+                [
+                    'id' => 'pro',
+                    'name' => 'Profissional',
+                    'price' => '157,90',
+                    'benefits' => [
+                        ['text' => 'Análises ilimitadas', 'highlight' => true],
+                        ['text' => 'Suporte prioritário'],
+                        ['text' => 'Acesso antecipado'],
+                        ['text' => 'Até 3 contas']
+                    ],
+                    'button_text' => 'Selecionar Plano',
+                    'highlight' => true
+                ],
+                [
+                    'id' => 'enterprise',
+                    'name' => 'Empresarial',
+                    'price' => 'A partir de 197,90',
+                    'benefits' => [
+                        ['text' => 'Tudo do plano Pro'],
+                        ['text' => 'Personalização'],
+                        ['text' => 'Múltiplos acessos'],
+                        ['text' => 'Suporte dedicado']
+                    ],
+                    'button_text' => 'Falar com Vendas',
+                    'highlight' => false
+                ]
+                ],
             'faq' => [
                 'title' => 'Perguntas Frequentes',
                 'items' => [

@@ -4,6 +4,16 @@ namespace App\Services;
 use App\Utils\Database;
 use Exception;
 
+/**
+ * Classe SecurityDashboard
+ * 
+ * Fornece métricas e informações sobre a segurança do sistema.
+ * TODO: Refatorar - Consolidar lógica de verificação de segurança do ambiente (headers, permissões, .env) de app/Security/security_check.php nesta classe para evitar duplicação.
+ *
+ * @package App\Services
+ * @author Sistema de Segurança
+ * @version 1.0.0
+ */
 class SecurityDashboard {
     private $logger;
     private $db;

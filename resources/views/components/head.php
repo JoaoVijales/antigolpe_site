@@ -14,3 +14,4 @@
 <meta name="author" content="AntiGolpe">
 
 <title><?= htmlspecialchars($title) ?></title>
+<link rel="stylesheet" href="<?= View::asset('css/style.css') ?>">

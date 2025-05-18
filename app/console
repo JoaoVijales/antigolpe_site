@@ -1,4 +1,5 @@
 <?php
+// TODO: O diretório app/Models/ está vazio. A lógica de negócio e acesso a dados que normalmente estaria aqui parece estar dispersa em outras classes (ex: Services, Utils). Considerar criar Models para encapsular essa lógica.
 // Carrega o autoloader do Composer
 require_once __DIR__ . '/../vendor/autoload.php';
 
@@ -23,6 +24,7 @@ $bruteForce = new BruteForceProtection();
 $fileUpload = new FileUploadSecurity();
 
 // Função para verificar a saúde do sistema
+// TODO: Refatorar - Lógica de verificação de saúde e permissões pode ser consolidada ou usar métodos de App\Services\SecurityDashboard.
 function checkSystemHealth($dashboard, $alert) {
     $health = $dashboard->getSystemHealth();
     $issues = [];
@@ -74,6 +76,7 @@ function checkSystemHealth($dashboard, $alert) {
 }
 
 // Função para verificar ameaças ativas
+// TODO: Refatorar - Lógica de verificação e alerta pode ser movida para App\Services\SecurityDashboard ou App\Services\SecurityAlert.
 function checkActiveThreats($dashboard, $alert) {
     $threats = $dashboard->getSecurityMetrics()['active_threats'];
     
@@ -91,6 +94,7 @@ function checkActiveThreats($dashboard, $alert) {
 }
 
 // Função para verificar IPs bloqueados
+// TODO: Refatorar - Lógica de verificação de bloqueios expirados pode ser movida para App\Services\SecurityDashboard.
 function checkBlockedIPs($dashboard, $alert) {
     $blocked = $dashboard->getSecurityMetrics()['blocked_ips'];
     
@@ -110,6 +114,7 @@ function checkBlockedIPs($dashboard, $alert) {
 }
 
 // Função para verificar falhas de login
+// TODO: Refatorar - Lógica de verificação de falhas pode ser movida para App\Services\SecurityDashboard.
 function checkFailedLogins($dashboard, $alert) {
     $failed = $dashboard->getSecurityMetrics()['failed_logins'];
     
@@ -128,6 +133,7 @@ function checkFailedLogins($dashboard, $alert) {
 }
 
 // Função para limpar logs antigos
+// TODO: Refatorar - Mover lógica de limpeza de logs para uma classe de serviço (ex: App\Services\CleanupService) ou App\Services\SecurityDashboard para encapsular acesso ao DB.
 function cleanupOldLogs($db) {
     $query = "DELETE FROM security_logs WHERE created_at < DATE_SUB(NOW(), INTERVAL 30 DAY)";
     $db->query($query);
@@ -143,6 +149,7 @@ function cleanupOldLogs($db) {
 }
 
 // Função para gerar relatório
+// TODO: Refatorar - Mover lógica de geração de relatório para App\Services\SecurityDashboard ou uma nova classe de relatório.
 function generateReport($issues, $threats, $blocked, $failed) {
     $report = "Relatório de Segurança - " . date('Y-m-d H:i:s') . "\n\n";
     
