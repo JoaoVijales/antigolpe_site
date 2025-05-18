@@ -7,7 +7,7 @@ class Container {
     private $config;
 
     private function __construct() {
-        $this->config = require __DIR__ . '/../app/config/services.php';
+        $this->config = require __DIR__ . '/../Config/services.php';
     }
 
     public static function getInstance(): self {
