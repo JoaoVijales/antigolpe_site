@@ -1,4 +1,4 @@
-<?php use App\Utils\View; /** @var array $item */ ?>
+<?php use App\Utils\View; ?>
 <?php
 /** @var array $item */
 ?>
