@@ -9,8 +9,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
 
 <!-- SEO Meta Tags -->
-<meta name="description" content="<?= $this->escape($meta['description'] ?? 'AntiGolpe') ?>">
-<meta name="keywords" content="<?= $this->escape($meta['keywords'] ?? 'segurança online') ?>">
+<meta name="description" content="<?= htmlspecialchars($meta['description'] ?? 'AntiGolpe') ?>">
+<meta name="keywords" content="<?= htmlspecialchars($meta['keywords'] ?? 'segurança online') ?>">
 <meta name="author" content="AntiGolpe">
 
-<title><?= $this->escape($title) ?></title>
+<title><?= htmlspecialchars($title) ?></title>
