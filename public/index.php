@@ -41,11 +41,6 @@ try {
             $routesDefinition($r); // CORREÇÃO: Chamar a closure passando o RouteCollector
         } else {
             // Tratar erro: routes.php não retornou o que era esperado
-            // Em um ambiente de produção, você pode querer lançar uma exceção ou logar isso de forma mais robusta
-            if (APP_ENV === 'development') {
-                 echo "<h1>Erro de Configuração</h1><p>O arquivo de rotas não retornou uma função callable.</p>";
-            }
-            // Dependendo da sua lógica, pode ser necessário parar a execução ou adicionar uma rota de fallback
         }
     });
 
@@ -147,19 +142,6 @@ try {
         error_log("Falha no Logger: " . $loggerError->getMessage());
     }
 
-    // Temporário: Exibir erro no navegador em ambiente de desenvolvimento
-    if (APP_ENV === 'development') {
-        echo "<h1>Erro 500</h1>";
-        echo "<p>Ocorreu um erro interno no servidor:</p>";
-        echo "<p>Detalhes do erro:</p>";
-        echo "<pre>" . htmlspecialchars($e->getMessage()) . "</pre>";
-        echo "<p>Rastreamento da pilha:</p>";
-        echo "<pre>" . htmlspecialchars($e->getTraceAsString()) . "</pre>";
-    }
-
-    $responseData = APP_ENV === 'development'
-        ? ['error' => $e->getMessage(), 'trace' => $e->getTraceAsString()]
-        : ['error' => 'Ocorreu um erro inesperado'];
 
      // Enviar a resposta de erro HTTP
      // Nota: Usar (new HttpResponse(...))->send() é preferível se a classe HttpResponse gerencia headers/output buffers.

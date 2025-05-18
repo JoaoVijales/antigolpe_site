@@ -133,17 +133,6 @@
        error_log("ERRO ao obter serviço 'google_analytics': " . $e->getMessage());
   }
   ?>
-  <script type="module">
-    <?php
-    // Usar ROOT_PATH também para o JS
-    $jsPath = (defined('ROOT_PATH') ? ROOT_PATH : __DIR__ . '/../../') . '/public/assets/js/main.js';
-     if (file_exists($jsPath)) {
-         echo file_get_contents($jsPath); // Mantido a inclusão direta do JS por enquanto
-     } else {
-         // Logar um erro ou warning se o arquivo JS não for encontrado
-          error_log("ERRO: Arquivo JS não encontrado em: " . $jsPath);
-     }
-    ?>
-  </script>
+  <script type="module" src="<?= View::asset('js/main.js') ?>"></script>
 </body>
 </html>
