@@ -10,18 +10,12 @@
     ]
   ]) ?>
   
+  <!-- CSS Principal -->
+  <link rel="stylesheet" href="<?= View::asset('css/style.css') ?>">
+
   <style>
-    /* Manter todos os estilos originais */
-    <?php
-    // Tentar usar ROOT_PATH se definido, caso contrário, usar caminho relativo mais seguro
-    $cssPath = (defined('ROOT_PATH') ? ROOT_PATH : __DIR__ . '/../../') . '/public/assets/css/style.css';
-    if (file_exists($cssPath)) {
-        echo file_get_contents($cssPath);
-    } else {
-        // Logar um erro ou warning se o arquivo CSS não for encontrado
-         error_log("ERRO: Arquivo CSS não encontrado em: " . $cssPath);
-    }
-    ?>
+    /* CSS inline ou estilos específicos podem vir aqui, se necessário */
+    /* A lógica de inclusão do style.css via PHP foi removida */
   </style>
 </head>
 <body>
@@ -54,7 +48,7 @@
     // Usar ROOT_PATH também para o JS
     $jsPath = (defined('ROOT_PATH') ? ROOT_PATH : __DIR__ . '/../../') . '/public/assets/js/main.js';
      if (file_exists($jsPath)) {
-         echo file_get_contents($jsPath);
+         echo file_get_contents($jsPath); // Mantido a inclusão direta do JS por enquanto
      } else {
          // Logar um erro ou warning se o arquivo JS não for encontrado
           error_log("ERRO: Arquivo JS não encontrado em: " . $jsPath);
