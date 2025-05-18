@@ -11,7 +11,12 @@
 
   <ul class="benefits">
     <?php foreach ($plan['benefits'] as $benefit) : ?>
-      <li class="<?php echo $benefit['highlight'] ? 'highlight' : '' ?>">
+      <?php
+        $class = $benefit['highlight'] ? 'highlight' : '';
+        echo "<li class=\"";
+        echo $class;
+        echo "\">";
+      ?>
         <?= $benefit['text'] ?>
       </li>
     <?php endforeach ?>
