@@ -3,9 +3,10 @@ namespace App\Controllers;
 
 use App\Utils\View;
 use App\Utils\HttpResponse;
+use App\Utils\HtmlResponse;
 
 class HomeController {
-    public function index(): HttpResponse {
+    public function index(): HtmlResponse {
         $htmlContent = View::render('pages/home', [
             'title' => 'AntiGolpe - Proteção contra golpes',
             'hero' => [
@@ -50,6 +51,6 @@ class HomeController {
             ]
         ]);
 
-        return new HttpResponse(200, $htmlContent);
+        return new HtmlResponse(200, $htmlContent);
     }
 }
