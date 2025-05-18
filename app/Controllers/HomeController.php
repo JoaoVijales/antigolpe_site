@@ -48,8 +48,8 @@ class HomeController {
                     'name' => 'Básico',
                     'price' => '47,90',
                     'benefits' => [
-                        ['text' => '5 análises por mês'],
-                        ['text' => 'Suporte por email']
+                        ['text' => '5 análises por mês', 'highlight' => false],
+                        ['text' => 'Suporte por email', 'highlight' => false]
                     ],
                     'button_text' => 'Selecionar Plano',
                     'highlight' => false
@@ -74,8 +74,8 @@ class HomeController {
                     'benefits' => [
                         ['text' => 'Tudo do plano Pro'],
                         ['text' => 'Personalização'],
-                        ['text' => 'Múltiplos acessos'],
-                        ['text' => 'Suporte dedicado']
+                        ['text' => 'Múltiplos acessos', 'highlight' => false],
+                        ['text' => 'Suporte dedicado', 'highlight' => false]
                     ],
                     'button_text' => 'Falar com Vendas',
                     'highlight' => false
