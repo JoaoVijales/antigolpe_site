@@ -2,10 +2,11 @@
 namespace App\Controllers;
 
 use App\Utils\View;
+use App\Utils\HttpResponse;
 
 class HomeController {
-    public function index(): string {
-        return View::render('pages/home', [
+    public function index(): HttpResponse {
+        $htmlContent = View::render('pages/home', [
             'title' => 'AntiGolpe - Proteção contra golpes',
             'hero' => [
                 'title' => 'Pare de cair em golpes',
@@ -48,5 +49,7 @@ class HomeController {
                 ]
             ]
         ]);
+
+        return new HttpResponse(200, $htmlContent);
     }
 }
