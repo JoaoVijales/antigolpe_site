@@ -48,6 +48,22 @@ try {
     $httpMethod = $_SERVER['REQUEST_METHOD'];
     $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
+    // --- Adicionar lógica para remover o base path (como no default.php) ---
+    $basePath = dirname($_SERVER['SCRIPT_NAME']);
+    // Ensure the base path ends with a slash if it's not just '/'
+    if ($basePath !== '/' && substr($basePath, -1) !== '/') {
+        $basePath .= '/';
+    }
+    // Remove the base path from the URI
+    if (substr($uri, 0, strlen($basePath)) === $basePath) {
+        $uri = substr($uri, strlen($basePath));
+    }
+    // Ensure the URI starts with a slash, even if it's now empty (root)
+    if ($uri === '' || $uri === false) {
+        $uri = '/';
+    }
+    // -------------------------------------------------------------------
+
     $routeInfo = $dispatcher->dispatch($httpMethod, $uri);
     
     switch ($routeInfo[0]) {
