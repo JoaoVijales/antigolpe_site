@@ -39,9 +39,6 @@ require_once ROOT_PATH . '/app/config/security.php';
 // Inicializa o logger
 $logger = new \App\Services\Logger(ROOT_PATH . '/storage/logs');
 
-// Inicializa o monitor de segurança
-$securityMonitor = new \App\Services\SecurityMonitor($logger);
-
 // Inicializa o dashboard de segurança
 $dashboard = new \App\Services\SecurityDashboard($logger, new \App\Utils\Database());
 

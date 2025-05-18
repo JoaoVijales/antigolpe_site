@@ -10,8 +10,8 @@
 spl_autoload_register(function ($class) {
     // Mapeamento de classes para arquivos
     $classMap = [
-        'BruteForceProtection' => __DIR__ . '/brute_force_protection.php',
-        'FileUploadSecurity' => __DIR__ . '/file_upload_security.php'
+        'FileUploadSecurity' => __DIR__ . '/file_upload_security.php',
+        'SessionService' => __DIR__ . '/../Services/SessionService.php'
     ];
 
     // Verifica se a classe está no mapa
