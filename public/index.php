@@ -69,7 +69,7 @@ try {
 
 } catch (\Throwable $e) {
     // Tratamento centralizado de erros
-    $logger = Container::get('logger');
+    $logger = $container->get('logger');
     $logger->error("Falha crítica: {$e->getMessage()}", [
         'trace' => $e->getTraceAsString(),
         'arquivo' => $e->getFile(),
