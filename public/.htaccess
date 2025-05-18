@@ -9,7 +9,7 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 
 # Redirecionar todas as requisições para o index.php
-RewriteRule ^(.*)$ index.php [QSA,L]
+RewriteRule ^ index.php [L]
 
 # Configurações de segurança básicas
 Options -Indexes
