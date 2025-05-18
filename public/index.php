@@ -11,6 +11,7 @@ use App\Utils\Container;
 use App\Utils\HttpResponse;
 use FastRoute\Dispatcher;
 use App\Middlewares\CorsMiddleware;
+use App\Utils\HtmlResponse; // Certificar que HtmlResponse está importado para verificações, se necessário.
 
 // Configuração inicial
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
@@ -107,10 +108,10 @@ try {
                 // Execução do método do controller
                 $response = $controller->$method($vars);
 
-                // Verificar se o retorno é uma instância de HttpResponse antes de chamar send()
-                if (!($response instanceof HttpResponse)) {
-                     echo "Erro: O método do Controller não retornou uma instância de HttpResponse."; // Log de erro
-                      (new HttpResponse(500, ['error' => 'Internal Server Error', 'details' => 'Controller did not return HttpResponse']))->send();
+                // Verificar se o retorno é um objeto de resposta válido (possui o método send())
+                if (!(is_object($response) && method_exists($response, 'send'))) { // CORREÇÃO: Verificar se é objeto e tem método send()
+                     echo "Erro: O retorno do Controller não é um objeto de resposta válido com método send()."; // Log de erro
+                      (new HttpResponse(500, ['error' => 'Internal Server Error', 'details' => 'Controller did not return a valid response object']))->send();
                      break; // Sair do switch após enviar a resposta de erro
                 }
 
