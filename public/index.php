@@ -41,7 +41,7 @@ $container = Container::getInstance();
 try {
     // Configuração do roteador
     $dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r) {
-        require __DIR__ . '/../app/Config/routes.php';
+        require __DIR__ . '/app/Config/routes.php';
     });
 
     // Processamento da requisição
