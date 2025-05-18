@@ -25,7 +25,14 @@
   </style>
 </head>
 <body>
-  <?= $content ?>
+  <?= View::render('components/layout/header') ?>
+  <?= View::render('components/layout/auth_popups') ?>
+
+  <main>
+    <?= $content ?>
+  </main>
+
+  <?= View::render('components/layout/footer') ?>
 
   <?php
   // Acessar o container globalmente para obter o serviço

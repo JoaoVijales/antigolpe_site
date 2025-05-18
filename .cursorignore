@@ -3,3 +3,12 @@
 /dist
 /docs
 /examples
+/vendor
+default.php
+/storage
+/database
+database
+/data
+data
+/logs
+logs
