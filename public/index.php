@@ -73,6 +73,16 @@ try {
         'linha' => $e->getLine()
     ]);
 
+    // Temporário: Exibir erro no navegador em ambiente de desenvolvimento
+    if (APP_ENV === 'development') {
+        echo "<h1>Erro 500</h1>";
+        echo "<p>Ocorreu um erro interno no servidor:</p>";
+        echo "<p>Detalhes do erro:</p>";
+        echo "<pre>" . htmlspecialchars($e->getMessage()) . "</pre>";
+        echo "<p>Rastreamento da pilha:</p>";
+        echo "<pre>" . htmlspecialchars($e->getTraceAsString()) . "</pre>";
+    }
+
     $responseData = APP_ENV === 'development'
         ? ['error' => $e->getMessage(), 'trace' => $e->getTraceAsString()]
         : ['error' => 'Ocorreu um erro inesperado'];
