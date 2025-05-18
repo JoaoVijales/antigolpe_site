@@ -1,10 +1,11 @@
+<?php use App\Utils\View; /** @var array $item */ ?>
 <?php
 /** @var array $item */
 ?>
 <details class="faq-content">
   <summary class="faq-title">
     <?= $item['question'] ?>
-    <img class="arrow-icon" src="<?= $this->asset('images/arrow-icon.svg') ?>" alt="">
+    <img class="arrow-icon" src="<?= View::asset('images/arrow-icon.svg') ?>" alt="">
   </summary>
   <div class="faq-answer">
     <?php if (is_array($item['answer'])) : ?>

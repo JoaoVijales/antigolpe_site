@@ -1,7 +1,8 @@
+<?php use App\Utils\View; ?>
 <header class="page">
   <nav class="menu" role="navigation" aria-label="Menu principal">
     <div class="menu-logo">
-      <img class="logo-icon" src="<?= $this->asset('images/logo-icon0.png') ?>" alt="Logo AntiGolpe" />
+      <img class="logo-icon" src="<?= View::asset('images/logo-icon0.png') ?>" alt="Logo AntiGolpe" />
       <div class="logo-name">
         <h1 class="logo-name-text">AntiGolpe</h1>
       </div>

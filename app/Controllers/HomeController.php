@@ -12,7 +12,7 @@ class HomeController {
             'hero' => [
                 'title' => 'Pare de cair em golpes',
                 'subtitle' => 'Verifique anúncios em segundos',
-                'image' => View::asset('images/hero-mockup.png') 
+                'image' => 'images/hero-mockup.png'
             ],
             'features' => [
                 [

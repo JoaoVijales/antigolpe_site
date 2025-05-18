@@ -1,4 +1,4 @@
-<?php /** @var array $errors */ ?>
+<?php use App\Utils\View; /** @var array $errors */ ?>
 <div id="loginPopup" class="popup">
   <div class="popup-content">
     <button class="close-popup" aria-label="Fechar popup">&times;</button>
@@ -14,10 +14,10 @@
     </div>
     
     <form class="login-form" method="POST" action="/api/auth/login">
-      <input type="hidden" name="csrf_token" value="<?= $this->escape($_SESSION['csrf_token'] ?? '') ?>">
+      <input type="hidden" name="csrf_token" value="<?= View::escape($_SESSION['csrf_token'] ?? '') ?>">
       
       <?php if (!empty($errors['global'])): ?>
-        <div class="alert error"><?= $this->escape($errors['global']) ?></div>
+        <div class="alert error"><?= View::escape($errors['global']) ?></div>
       <?php endif; ?>
 
       <div class="form-group">
@@ -27,10 +27,10 @@
           id="loginEmail" 
           name="email" 
           required
-          value="<?= $this->escape($_POST['email'] ?? '') ?>"
+          value="<?= View::escape($_POST['email'] ?? '') ?>"
         >
         <?php if (!empty($errors['email'])): ?>
-          <div class="form-error"><?= $this->escape($errors['email']) ?></div>
+          <div class="form-error"><?= View::escape($errors['email']) ?></div>
         <?php endif; ?>
       </div>
       
@@ -43,7 +43,7 @@
           required
         >
         <?php if (!empty($errors['password'])): ?>
-          <div class="form-error"><?= $this->escape($errors['password']) ?></div>
+          <div class="form-error"><?= View::escape($errors['password']) ?></div>
         <?php endif; ?>
       </div>
 

@@ -4,8 +4,8 @@
 ?>
 <article class="features-card" data-animate="<?= $animationDirection ?>">
   <img class="feature-icon" 
-       src="<?= $this->asset($card['icon']) ?>" 
-       alt="<?= $card['alt_text'] ?>">
+       src="<?= App\Utils\View::asset($card['icon']) ?>" 
+       alt="<?= $card['alt_text'] ?? 'Ícone de Recurso' ?>">
   <h3 class="feature-title"><?= $card['title'] ?></h3>
   <?php if (!empty($card['description'])) : ?>
     <p class="feature-desc"><?= $card['description'] ?></p>
