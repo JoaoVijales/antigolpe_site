@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <?= $this->render('components/head', [
+  <?= View::render('components/head', [
     'title' => $title ?? 'AntiGolpe',
     'meta' => [
       'description' => 'Verifique anúncios em segundos e evite cair em golpes',
@@ -17,7 +17,7 @@
 <body>
   <?= $content ?>
 
-  <?= $this->service('google_analytics')->getTrackingCode() ?>
+  <?= View::service('google_analytics')->getTrackingCode() ?>
   <script type="module">
     <?= file_get_contents(__DIR__ . '/../../public/assets/js/main.js') ?>
   </script>

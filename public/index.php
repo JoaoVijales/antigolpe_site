@@ -1,12 +1,6 @@
 <?php
 declare(strict_types=1);
 
-// Linhas temporárias para exibição de erro - remova ou comente em produção
-// ini_set('display_errors', '1');
-// ini_set('display_startup_errors', '1');
-// error_reporting(E_ALL);
-
-
 /**
  * Ponto de entrada principal da aplicação (Front Controller)
  */
@@ -21,9 +15,6 @@ use App\Middlewares\CorsMiddleware;
 // Configuração inicial
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
 $dotenv->safeLoad();
-
-// Debug temporário: Verificar se APP_ENV foi carregado
-// echo "APP_ENV carregado: " . ($_ENV['APP_ENV'] ?? 'Não Definido') . "<br>"; // Manter o debug comentado
 
 define('APP_ENV', isset($_ENV['APP_ENV']) ? $_ENV['APP_ENV'] : 'production');
 
@@ -41,7 +32,20 @@ $container = Container::getInstance();
 try {
     // Configuração do roteador
     $dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r) {
-        require __DIR__ . '/app/Config/routes.php';
+        // Carregar e chamar a closure de definição de rotas
+        $routesDefinition = require __DIR__ . '/../app/Config/routes.php';
+
+        // Verificar se o arquivo de rotas retornou um callable (closure)
+        if (is_callable($routesDefinition)) {
+            $routesDefinition($r); // CORREÇÃO: Chamar a closure passando o RouteCollector
+        } else {
+            // Tratar erro: routes.php não retornou o que era esperado
+            // Em um ambiente de produção, você pode querer lançar uma exceção ou logar isso de forma mais robusta
+            if (APP_ENV === 'development') {
+                 echo "<h1>Erro de Configuração</h1><p>O arquivo de rotas não retornou uma função callable.</p>";
+            }
+            // Dependendo da sua lógica, pode ser necessário parar a execução ou adicionar uma rota de fallback
+        }
     });
 
     // Processamento da requisição
@@ -71,13 +75,48 @@ try {
             $handler = $routeInfo[1];
             $vars = $routeInfo[2];
             
-            // Resolução de dependências
-            [$controllerClass, $method] = $handler;
-            $controller = $container->resolve($controllerClass);
-            
-            // Execução do método do controller
-            $response = $controller->$method($vars);
-            $response->send();
+            // Se o handler for uma closure (embora com a estrutura de routes.php não deva acontecer mais)
+            if ($handler instanceof Closure) {
+                 // Tratar closures se necessário - ajuste conforme sua necessidade
+                 // Por agora, assumimos que handlers de routes.php sempre retornam [Classe, Método].
+                 // Se tiverem closures em routes.php, a lógica abaixo para controllers precisará ser ajustada/copiada.
+                 echo "Erro: Handler closure encontrada onde [Classe, Método] era esperado."; // Log de erro
+                 (new HttpResponse(500, ['error' => 'Internal Server Error', 'details' => 'Unexpected closure handler']))->send();
+
+            } else {
+                // Lógica para controllers baseados em array [Classe, Método]
+                // Resolução de dependências
+                [$controllerClass, $method] = $handler;
+
+                // Verificar se a classe do controller existe antes de tentar resolver
+                if (!class_exists($controllerClass)) {
+                     echo "Erro: Classe do Controller não encontrada: " . $controllerClass; // Log de erro
+                     (new HttpResponse(500, ['error' => 'Internal Server Error', 'details' => 'Controller class not found']))->send();
+                     break; // Sair do switch após enviar a resposta de erro
+                }
+
+                $controller = $container->resolve($controllerClass);
+
+                // Verificar se o método existe no controller resolvido
+                 if (!method_exists($controller, $method)) {
+                     echo "Erro: Método do Controller não encontrado: " . $method . " na classe " . $controllerClass; // Log de erro
+                      (new HttpResponse(500, ['error' => 'Internal Server Error', 'details' => 'Controller method not found']))->send();
+                     break; // Sair do switch após enviar a resposta de erro
+                 }
+
+                // Execução do método do controller
+                $response = $controller->$method($vars);
+
+                // Verificar se o retorno é uma instância de HttpResponse antes de chamar send()
+                if (!($response instanceof HttpResponse)) {
+                     echo "Erro: O método do Controller não retornou uma instância de HttpResponse."; // Log de erro
+                      (new HttpResponse(500, ['error' => 'Internal Server Error', 'details' => 'Controller did not return HttpResponse']))->send();
+                     break; // Sair do switch após enviar a resposta de erro
+                }
+
+                $response->send();
+            } // Fim do if handler instanceof Closure
+
             break;
 
         case Dispatcher::NOT_FOUND:
@@ -91,12 +130,21 @@ try {
 
 } catch (\Throwable $e) {
     // Tratamento centralizado de erros
-    $logger = $container->get('logger');
-    $logger->error("Falha crítica: {$e->getMessage()}", [
-        'trace' => $e->getTraceAsString(),
-        'arquivo' => $e->getFile(),
-        'linha' => $e->getLine()
-    ]);
+    // Tentar obter o logger do container. Pode falhar se o container não estiver configurado corretamente.
+    try {
+        $logger = $container->get('logger');
+        // Reativar a linha de log
+        $logger->error("Falha crítica: {$e->getMessage()}", [
+            'trace' => $e->getTraceAsString(),
+            'arquivo' => $e->getFile(),
+            'linha' => $e->getLine()
+        ]);
+    } catch (\Throwable $loggerError) {
+        // Se falhar ao obter ou usar o logger, logar a falha no log de sistema ou stderr
+        error_log("ERRO CRITICO (Logger Falhou): " . $e->getMessage() . " em " . $e->getFile() . ":" . $e->getLine());
+        error_log("Trace original: " . $e->getTraceAsString());
+        error_log("Falha no Logger: " . $loggerError->getMessage());
+    }
 
     // Temporário: Exibir erro no navegador em ambiente de desenvolvimento
     if (APP_ENV === 'development') {
@@ -112,5 +160,9 @@ try {
         ? ['error' => $e->getMessage(), 'trace' => $e->getTraceAsString()]
         : ['error' => 'Ocorreu um erro inesperado'];
 
-    (new HttpResponse(500, $responseData))->send();
+     // Enviar a resposta de erro HTTP
+     // Nota: Usar (new HttpResponse(...))->send() é preferível se a classe HttpResponse gerencia headers/output buffers.
+     // Se não, um fallback manual como http_response_code(500); echo json_encode($responseData); pode ser necessário.
+     // Mantendo a chamada original que assume HttpResponse funciona:
+     (new HttpResponse(500, $responseData))->send();
 }
