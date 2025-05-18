@@ -25,9 +25,7 @@
             "App\\Utils\\": "app/Utils/",
             "App\\Security\\": "app/Security/"
         },
-        "files": [
-            "app/Utils/helpers.php"
-        ]
+        "files": []
     },
     "autoload-dev": {
         "psr-4": {
