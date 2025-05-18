@@ -1,15 +1,16 @@
 <?php
 /** @var array $heroData */
 ?>
-<section class="hero" id="hero">
-  <div class="hero-content">
-    <h1><?= $heroData['title'] ?></h1>
-    <p class="subtitle"><?= $heroData['subtitle'] ?></p>
-    <button class="cta-button" data-action="scroll-to-form">
-      <?= $heroData['cta_text'] ?? 'Saiba Mais' // Usar Saiba Mais como fallback ?>
-    </button>
+<section id="hero" class="conatiner-hero" aria-labelledby="hero-title">
+  <div class="hero">
+    <div class="hero-content">
+      <h1 id="hero-title" class="hero-title"><?= $heroData['title'] ?></h1>
+      <p class="text"><?= $heroData['subtitle'] ?></p>
+      <button class="cta-buton" aria-label="Começar a usar o AntiGolpe">
+        <span class="button-text">Começar Agora</span>
+      </button>
   </div>
-  <div class="hero-image">
-    <img src="<?= App\Utils\View::asset($heroData['image']) ?>" alt="<?= $heroData['image_alt'] ?? 'Imagem Hero' ?>">
+  <div class="hero-img">
+    <img class="whtsp-mockup" src="<?= App\Utils\View::asset($heroData['image']) ?>" alt="<?= $heroData['image_alt'] ?? 'Imagem Hero' ?>">
   </div>
 </section>
