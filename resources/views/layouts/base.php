@@ -1,3 +1,4 @@
+<?php use App\Utils\View; ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
