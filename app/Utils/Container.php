@@ -49,4 +49,4 @@ class Container {
 }
 
 // Inicializa o container quando a classe é carregada
-Container::initialize();
+// Container::initialize();
