@@ -5,9 +5,6 @@ return function (RouteCollector $r) {
     // Rotas da API
     $r->addGroup('/api', function (RouteCollector $r) {
         $r->addGroup('/auth', function (RouteCollector $r) {
-            $r->addRoute('POST', '/register', [App\Controllers\Auth\EmailAuthController::class, 'register']);
-            $r->addRoute('POST', '/login', [App\Controllers\Auth\LoginController::class, 'login']);
-            $r->addRoute('POST', '/google', [App\Controllers\Auth\GoogleAuthController::class, 'authenticate']);
         });
     });
 

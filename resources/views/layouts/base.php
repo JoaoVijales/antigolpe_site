@@ -107,6 +107,11 @@
    }
 
    </style>
+
+   <!-- Firebase -->
+   <script src="https://www.gstatic.com/firebasejs/9.1.0/firebase-app-compat.js"></script>
+   <script src="https://www.gstatic.com/firebasejs/9.1.0/firebase-auth-compat.js"></script>
+   <!-- Adicione outros SDKs do Firebase que você usar, como Firestore, etc. -->
 </head>
 <body>
   <?= View::render('components/layout/header') ?>

@@ -6,18 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - AntiGolpe</title>
     <link rel="stylesheet" href="dashboard.css">
-    <!-- Firebase -->
-    <script src="https://www.gstatic.com/firebasejs/9.x.x/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.x.x/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.x.x/firebase-firestore-compat.js"></script>
+    <!-- Firebase (Carregado via layouts/base.php ou outro ponto central) -->
     <!-- Stripe.js -->
     <script src="https://js.stripe.com/v3/"></script>
     <!-- Configuração -->
-    <script src="config.php"></script>
-    <script type="module">
-        import config from './config.js';
-        window.appConfig = config;
-    </script>
+    <!-- A configuração do Firebase agora é centralizada no AuthHandler.js -->
 </head>
 <body>
     <header class="dashboard-header">
@@ -94,36 +87,40 @@
         </div>
     </div>
 
-    <script>
-        // Inicializar Firebase com a configuração segura
-        firebase.initializeApp(window.appConfig.firebase);
-        const auth = firebase.auth();
-        const db = firebase.firestore();
+    <script type="module">
+        import { AuthHandler } from './assets/js/modules/auth.js';
 
-        // Verificar estado da autenticação
-        auth.onAuthStateChanged(function(user) {
+        // Usar o AuthHandler para verificar o estado de autenticação e gerenciar a UI
+        AuthHandler.onAuthStateChanged(user => {
+            const userNameSpan = document.querySelector('.user-name');
             if (user) {
-                // Usuário está logado
-                document.querySelector('.user-name').textContent = `Olá, ${user.displayName || user.email}`;
-                loadUserSubscription(user.uid);
+                // Usuário está logado: atualizar UI e carregar dados da assinatura
+                userNameSpan.textContent = `Olá, ${user.displayName || user.email}`;
+                // TODO: Se a lógica de assinatura ainda for tratada aqui e usar Firestore,
+                // obter a instância do Firestore do AuthHandler (se for exposta)
+                // ou adaptar para usar a ApiService para se comunicar com o backend apropriado.
+                // loadUserSubscription(user.uid);
             } else {
-                // Usuário não está logado, redirecionar para login
+                // Usuário não está logado: redirecionar para a página inicial/login
+                userNameSpan.textContent = 'Olá, Visitante'; // Ou limpar
                 window.location.href = 'index.html';
             }
         });
 
-        // Função para carregar a assinatura do usuário
+        // TODO: A função loadUserSubscription precisa ser adaptada.
+        // Se a assinatura ainda for no Firestore, obtenha a instância de forma centralizada.
+        // Se for no 'outro backend', use a ApiService.
         async function loadUserSubscription(userId) {
-            try {
-                const subscriptionDoc = await db.collection('subscriptions').doc(userId).get();
-                if (subscriptionDoc.exists) {
-                    const subscription = subscriptionDoc.data();
-                    // Atualizar UI para mostrar plano atual
-                    updateUIForCurrentPlan(subscription.plan);
-                }
-            } catch (error) {
-                console.error('Erro ao carregar assinatura:', error);
-            }
+             // Exemplo: se usar Firestore (garantir que this.db seja inicializado e exposto no AuthHandler)
+            // const subscriptionDoc = await AuthHandler.db.collection('subscriptions').doc(userId).get();
+
+            // Exemplo: se comunicar com o 'outro backend' usando ApiService
+            // try {
+            //     const subscriptionData = await ApiService.apiFetch(`users/${userId}/subscription`, 'GET', null, tokenDoOutroBackend);
+            //     updateUIForCurrentPlan(subscriptionData.plan);
+            // } catch (error) {
+            //     console.error('Erro ao carregar assinatura do outro backend:', error);
+            // }
         }
 
         // Função para atualizar UI baseado no plano atual
@@ -140,7 +137,7 @@
             });
         }
 
-        // Configuração dos planos
+        // Configuração dos planos (mantida localmente, mas pode vir de um backend se necessário)
         const plans = {
             basic: {
                 name: 'Plano Básico',
@@ -173,8 +170,10 @@
 
         // Função para redirecionar para o checkout com o plano selecionado
         function redirectToCheckout(planId) {
-            const user = auth.currentUser;
+            // Verificar estado de autenticação usando AuthHandler antes de redirecionar
+            const user = AuthHandler.getCurrentUser();
             if (!user) {
+                // Se não estiver logado (embora onAuthStateChanged já devesse redirecionar)
                 window.location.href = 'index.html';
                 return;
             }
@@ -193,19 +192,34 @@
             });
         });
 
-        // Logout
-        document.querySelector('.logout-button').addEventListener('click', function() {
-            auth.signOut().then(() => {
-                window.location.href = 'index.html';
-            }).catch((error) => {
-                console.error('Erro ao fazer logout:', error);
-            });
-        });
+        // O listener de logout agora está configurado no AuthHandler.js
+        // A navegação pós-logout (redirecionamento para index.html) pode ser
+        // tratada pelo próprio método logout no AuthHandler ou por um observer.
 
-        // Inicialização do Stripe com a chave segura
-        const stripe = Stripe(window.appConfig.stripe.publishableKey);
+        // TODO: A lógica do formulário de pagamento e Stripe também precisa ser revisada.
+        // Se o Stripe for processado por este backend PHP, o formulário deve enviar
+        // as informações do token Stripe para um endpoint PHP aqui. Se for pelo
+        // 'outro backend', a lógica deve se comunicar com ele.
+
+        // Inicialização do Stripe (mantida por enquanto, mas dependente do backend)
+        const stripe = Stripe('seu_publishable_key');
         const elements = stripe.elements();
-        const card = elements.create('card');
+        const card = elements.create('card', {
+            style: {
+                base: {
+                    fontSize: '16px',
+                    color: '#32325d',
+                    fontFamily: '"SegoeUi-Regular", sans-serif',
+                    '::placeholder': {
+                        color: '#aab7c4'
+                    }
+                },
+                invalid: {
+                    color: '#dc3545',
+                    iconColor: '#dc3545'
+                }
+            }
+        });
         card.mount('#card-element');
 
         // Manipulação de erros do cartão
@@ -218,43 +232,64 @@
             }
         });
 
-        // Manipulação do formulário de pagamento
+        // Manipulação do formulário de pagamento (precisa ser adaptada para o backend correto)
         const form = document.getElementById('payment-form');
         form.addEventListener('submit', async function(event) {
             event.preventDefault();
 
-            const {token, error} = await stripe.createToken(card);
+            // TODO: Obter o usuário logado do AuthHandler
+            const user = AuthHandler.getCurrentUser();
+            if (!user) {
+                 alert('Nenhum usuário logado para processar o pagamento.');
+                 return;
+            }
+
+            // Criar um token Stripe
+            const { token, error } = await stripe.createToken(card);
 
             if (error) {
                 const errorElement = document.getElementById('card-errors');
                 errorElement.textContent = error.message;
             } else {
-                // Enviar token para seu servidor
-                stripeTokenHandler(token);
-            }
-        });
+                // TODO: Enviar o token Stripe e o ID do usuário para o backend apropriado
+                // Se este backend PHP lida com Stripe:
+                // try {
+                //     const response = await ApiService.apiFetch('process-payment', 'POST', {
+                //         stripeToken: token.id,
+                //         userId: user.uid, // Ou o ID do usuário do outro backend
+                //         planId: localStorage.getItem('selectedPlan') // Enviar o plano selecionado
+                //     });
+                //     console.log('Pagamento processado:', response);
+                //     window.location.href = 'success.html'; // Redirecionar para a página de sucesso
+                // } catch (backendError) {
+                //     console.error('Erro ao processar pagamento no backend:', backendError);
+                //     alert('Erro ao processar pagamento: ' + (backendError.error || backendError.message));
+                // }
 
-        function stripeTokenHandler(token) {
-            // Aqui você enviaria o token para seu servidor
-            console.log('Token:', token);
-            // Exemplo de envio para servidor:
-            // fetch('/process-payment', {
-            //     method: 'POST',
-            //     headers: {'Content-Type': 'application/json'},
-            //     body: JSON.stringify({token: token.id})
-            // });
-        }
+                // Se o 'outro backend' lida com Stripe, use a ApiService para se comunicar com ele:
+                // const OTHER_BACKEND_PAYMENT_URL = 'URL_DO_OUTRO_BACKEND/process-payment'; // <<< SUBSTITUA AQUI
+                // try {
+                //     const response = await fetch(OTHER_BACKEND_PAYMENT_URL, {
+                //         method: 'POST',
+                //         headers: { 'Content-Type': 'application/json' },
+                //         body: JSON.stringify({
+                //             stripeToken: token.id,
+                //             userId: user.uid, // Ou o ID do usuário do outro backend
+                //             planId: localStorage.getItem('selectedPlan')
+                //             // Incluir o token de autenticação do outro backend, se necessário
+                //             // authToken: localStorage.getItem('otherBackendAuthToken')
+                //         })
+                //     });
+                //     if (!response.ok) throw await response.json();
+                //     console.log('Pagamento processado pelo outro backend:', response);
+                //     window.location.href = 'success.html'; // Redirecionar para a página de sucesso
+                // } catch (backendError) {
+                //      console.error('Erro ao processar pagamento no outro backend:', backendError);
+                //      alert('Erro ao processar pagamento: ' + (backendError.error || backendError.message));
+                // }
 
-        // Fechar modal
-        document.querySelector('.close-modal').addEventListener('click', function() {
-            document.getElementById('paymentModal').style.display = 'none';
-        });
-
-        // Fechar modal ao clicar fora
-        window.addEventListener('click', function(event) {
-            const modal = document.getElementById('paymentModal');
-            if (event.target === modal) {
-                modal.style.display = 'none';
+                // TODO: Atualmente, nenhuma chamada de backend para processar o pagamento está implementada.
+                alert('Lógica de processamento de pagamento precisa ser implementada.');
             }
         });
     </script>

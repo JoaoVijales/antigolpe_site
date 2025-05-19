@@ -7,10 +7,7 @@
     <title>Pagamento Concluído - AntiGolpe</title>
     <link rel="stylesheet" href="dashboard.css">
     <link rel="stylesheet" href="checkout.css">
-    <!-- Firebase -->
-    <script src="https://www.gstatic.com/firebasejs/9.x.x/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.x.x/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.x.x/firebase-firestore-compat.js"></script>
+    <!-- Firebase (Carregado via layouts/base.php ou outro ponto central) -->
     <style>
         .success-container {
             max-width: 600px;
@@ -80,40 +77,31 @@
     </main>
 
     <script>
-        // Configuração do Firebase
-        const firebaseConfig = {
-            // Suas configurações do Firebase aqui
-            apiKey: "sua_api_key",
-            authDomain: "seu_auth_domain",
-            projectId: "seu_project_id",
-            storageBucket: "seu_storage_bucket",
-            messagingSenderId: "seu_messaging_sender_id",
-            appId: "seu_app_id"
-        };
+        import { AuthHandler } from './assets/js/modules/auth.js';
 
-        // Inicializar Firebase
-        firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-
-        // Verificar estado da autenticação
-        auth.onAuthStateChanged(function(user) {
+        // Usar o AuthHandler para verificar o estado de autenticação e gerenciar a UI
+        AuthHandler.onAuthStateChanged(user => {
+            const userNameSpan = document.querySelector('.user-name');
             if (user) {
-                // Usuário está logado
-                document.querySelector('.user-name').textContent = `Olá, ${user.displayName || user.email}`;
+                // Usuário está logado: atualizar UI e garantir que está na página correta (se aplicável)
+                userNameSpan.textContent = `Olá, ${user.displayName || user.email}`;
+                // Opcional: Redirecionar para dashboard se já estiver logado (dependendo do fluxo desejado)
+                // window.location.href = 'dashboard.html';
             } else {
-                // Usuário não está logado, redirecionar para login
+                // Usuário não está logado: redirecionar para a página inicial/login
+                userNameSpan.textContent = 'Olá, Visitante'; // Ou limpar
                 window.location.href = 'index.html';
             }
         });
 
-        // Logout
-        document.querySelector('.logout-button').addEventListener('click', function() {
-            auth.signOut().then(() => {
-                window.location.href = 'index.html';
-            }).catch((error) => {
-                console.error('Erro ao fazer logout:', error);
-            });
-        });
+        // O listener de logout agora está configurado no AuthHandler.js
+        // A navegação pós-logout (redirecionamento para index.html) pode ser
+        // tratada pelo próprio método logout no AuthHandler ou por um observer.
+
+        // O script inline para o botão "Ir para o Dashboard" pode permanecer
+        // pois é navegação interna.
+
+        // onclick="window.location.href='dashboard.html'"
     </script>
 </body>
 </html> 

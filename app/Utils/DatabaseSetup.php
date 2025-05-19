@@ -42,19 +42,6 @@ class DatabaseSetup {
                 )
             ");
 
-            // Verifica e cria a tabela de tentativas de login
-            $this->createTable('login_attempts', "
-                CREATE TABLE IF NOT EXISTS login_attempts (
-                    id INT AUTO_INCREMENT PRIMARY KEY,
-                    username VARCHAR(255) NOT NULL,
-                    ip VARCHAR(45) NOT NULL,
-                    success BOOLEAN NOT NULL DEFAULT FALSE,
-                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                    INDEX idx_username_ip (username, ip),
-                    INDEX idx_created_at (created_at)
-                )
-            ");
-
             // Verifica e cria a tabela de atividades suspeitas
             $this->createTable('suspicious_activities', "
                 CREATE TABLE IF NOT EXISTS suspicious_activities (
