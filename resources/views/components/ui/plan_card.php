@@ -28,6 +28,7 @@
         </div>
         <div class="text-cents">,90</div>
       </div>
+    </div>
     <?php endif ?>
     
     <?php if (!$plan['text_variation']): ?>
