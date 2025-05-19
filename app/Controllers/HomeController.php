@@ -78,7 +78,7 @@ class HomeController {
                     'highlight' => true
                 ],
                 [
-                    'id' => 'enterprise',
+                    'id' => 'empr',
                     'name' => 'Empresarial',
                     'subtitle' => 'A partir de:',
                     'text_variation' => '2',
