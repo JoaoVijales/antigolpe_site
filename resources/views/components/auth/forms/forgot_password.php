@@ -1,3 +1,5 @@
+<?php use App\Utils\View; /** @var array $errors */ ?>
+
 <div class="form-group">
   <label for="RecoverEmail">Email</label>
   <input 

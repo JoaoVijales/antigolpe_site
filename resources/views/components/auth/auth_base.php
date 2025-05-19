@@ -1,4 +1,4 @@
-<?php use App\Utils\View; ?>
+<?php use App\Utils\View; /** @var array $errors */ ?>
 
 <!-- Cpmponete base de popup de login e registro com id dinominico -->
 <div id="<?= $id ?>" class="popup">
