@@ -112,7 +112,7 @@
   <?= View::render('components/layout/header') ?>
   <?= View::render('components/layout/auth_popups') ?>
 
-  <main>
+  <main style="margin-bottom: 4rem;">
     <?= $content ?>
   </main>
 
