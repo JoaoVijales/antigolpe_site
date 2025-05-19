@@ -81,6 +81,7 @@ class HomeController {
                     'id' => 'enterprise',
                     'name' => 'Empresarial',
                     'subtitle' => 'A partir de:',
+                    'text_variation' => '2',
                     'price' => '57',
                     'benefits' => [
                         ['text' => 'Tudo do Plano Profissional', 'highlight' => false],
