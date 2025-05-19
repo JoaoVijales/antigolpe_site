@@ -14,7 +14,7 @@
   ?>
   <div class="plan-price<?= $plan['text_variation'] ? $plan['text_variation'] : '' ?>">
     <?php if ($plan['text_variation']): ?>
-      <div class="plan-price-container">
+      <div class="price-container">
         <div class="text-off">
           <?= $plan['subtitle'] ?>
         </div>
