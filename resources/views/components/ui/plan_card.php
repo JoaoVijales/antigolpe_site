@@ -1,14 +1,14 @@
 <?php
 /** @var array $plan */
 ?>
-<article class="card <?= $plan['highlight'] ? 'highlight' : '' ?>">
+<article class="card <?= $plan['id']?>">
   <h3 class="plan-title"><?= $plan['name'] ?></h3>
   
   <div class="plan-price">
     <div class="text-price">
       <span>
-        <span class="currency">R$</span>
-        <span class="amount"><?= $plan['price'] ?></span>
+        <span class="text-coin">R$</span>
+        <span class="text-nunber"><?= $plan['price'] ?></span>
       </span>
     </div>
     <div class="text-cents">,90</div>
@@ -17,12 +17,14 @@
   <ul class="text-plan">
     <?php foreach ($plan['benefits'] as $benefit) : ?>
       <li 
-      class="plan-benefit<?= $benefit['highlight'] ? 'highlight' : '' ?>">
+      class="plan-benefit<?= $benefit['text_variation'] ? $benefit['text_variation'] : '' ?>">
         <?= $benefit['text'] ?></li>
     <?php endforeach ?>
   </ul>
 
   <button class="cta-buton" data-plan="<?= $plan['id'] ?>">
-    <?= $plan['button_text'] ?>
+    <span class="button-text">
+      <?= $plan['button_text'] ?>
+    </span>
   </button>
 </article>
