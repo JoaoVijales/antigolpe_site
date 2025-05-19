@@ -6,7 +6,7 @@
     <div class="hero-content">
       <h1 id="hero-title" class="hero-title"><?= $heroData['title'] ?></h1>
       <p class="text"><?= $heroData['subtitle'] ?></p>
-      <button class="cta-buton" aria-label="Começar a usar o AntiGolpe">
+      <button id="showSignup" class="cta-buton" aria-label="Começar a usar o AntiGolpe">
         <span class="button-text">Começar Agora</span>
       </button>
   </div>

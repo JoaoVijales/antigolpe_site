@@ -2,7 +2,6 @@
 import { ApiService } from '../services/api.js';
 // TODO: Verificar a origem e a necessidade de SessionManager e Ui
 // import { SessionManager } from './session.js'; // Exemplo
-// import { Ui } from './ui.js'; // Exemplo
 
 export class AuthHandler {
     static init() {
