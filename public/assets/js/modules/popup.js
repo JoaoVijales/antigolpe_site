@@ -51,62 +51,63 @@ export class PopupHandler {
     }
 
     static setupEventListeners() {
-        // Event Listeners para abrir popups (copiado do index.php)
-        const showSignupLink = document.getElementById('showSignup');
-        const showLoginLink = document.getElementById('showLogin');
-        // Adicionado listener para o botão "Começar Agora"
-        const ctaButtons = document.querySelectorAll('.cta-buton');
+        document.addEventListener('DOMContentLoaded', () => {
+            // Event Listeners para abrir popups (copiado do index.php)
+            const showSignupLink = document.getElementById('showSignup');
+            const showLoginLink = document.getElementById('showLogin');
+            // Adicionado listener para o botão "Começar Agora"
+            const ctaButtons = document.querySelectorAll('.cta-buton');
 
-        if (showSignupLink) {
-            showSignupLink.addEventListener('click', (e) => {
-                e.preventDefault();
-                this.openSignupPopup();
-            });
-        }
-
-        if (showLoginLink) {
-            showLoginLink.addEventListener('click', (e) => {
-                e.preventDefault();
-                this.openLoginPopup();
-            });
-        }
-
-        ctaButtons.forEach(button => {
-            button.addEventListener('click', (e) => {
-                e.preventDefault();
-                this.openSignupPopup();
-            });
-        });
-
-        // Event Listeners para fechar popups (copiado do index.php)
-        const closeButtons = document.querySelectorAll('.close-popup');
-        closeButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                this.closePopups();
-            });
-        });
-
-        // Fechar popup ao clicar fora (copiado do index.php)
-        // Adicionado verificação para feedbackPopup
-        window.addEventListener('click', (e) => {
-            if (this.signupPopup && e.target === this.signupPopup) {
-                this.closePopups();
+            if (showSignupLink) {
+                // REMOVIDO: showSignupLink.addEventListener('click', (e) => {
+                // REMOVIDO:     e.preventDefault();
+                // REMOVIDO:     this.openSignupPopup();
+                // REMOVIDO: });
             }
-            if (this.loginPopup && e.target === this.loginPopup) {
-                this.closePopups();
+
+            if (showLoginLink) {
+                showLoginLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    this.openLoginPopup();
+                });
             }
-             if (this.feedbackPopup && e.target === this.feedbackPopup && e.target === e.currentTarget) {
-                 this.closePopups();
+
+            ctaButtons.forEach(button => {
+                button.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    this.openSignupPopup();
+                });
+            });
+
+            // Event Listeners para fechar popups (copiado do index.php)
+            const closeButtons = document.querySelectorAll('.close-popup');
+            closeButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    this.closePopups();
+                });
+            });
+
+            // Fechar popup ao clicar fora (copiado do index.php)
+            // Adicionado verificação para feedbackPopup
+            window.addEventListener('click', (e) => {
+                if (this.signupPopup && e.target === this.signupPopup) {
+                    this.closePopups();
+                }
+                if (this.loginPopup && e.target === this.loginPopup) {
+                    this.closePopups();
+                }
+                 if (this.feedbackPopup && e.target === this.feedbackPopup && e.target === e.currentTarget) {
+                     this.closePopups();
+                 }
+            });
+
+             // Listener específico para fechar o feedbackPopup pelo botão
+             const feedbackCloseButton = document.querySelector('.feedback-close');
+             if(feedbackCloseButton) {
+                 feedbackCloseButton.addEventListener('click', () => {
+                     this.closePopups(); // Usa closePopups para garantir que todos fechem
+                 });
              }
         });
-
-         // Listener específico para fechar o feedbackPopup pelo botão
-         const feedbackCloseButton = document.querySelector('.feedback-close');
-         if(feedbackCloseButton) {
-             feedbackCloseButton.addEventListener('click', () => {
-                 this.closePopups(); // Usa closePopups para garantir que todos fechem
-             });
-         }
-
     }
 } 

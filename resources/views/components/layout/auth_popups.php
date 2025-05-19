@@ -1,7 +1,7 @@
 <?php use App\Utils\View; ?>
 
 <?= App\Utils\View::render('components/auth/auth_base', [
-    'id' => 'registerPopup',
+    'id' => 'signupPopup',
     'title' => 'Criar conta',
     'class_form' => 'signup-form',
     'action' => '/api/auth/register'

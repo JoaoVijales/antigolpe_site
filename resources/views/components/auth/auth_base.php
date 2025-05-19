@@ -23,7 +23,7 @@
             case 'loginPopup':
                 echo View::render('components/auth/forms/login_form', ['errors' => $errors]);
                 break;
-            case 'registerPopup':
+            case 'signupPopup':
                 echo View::render('components/auth/forms/register', ['errors' => $errors]);
                 break;
             case 'forgotPasswordPopup':
