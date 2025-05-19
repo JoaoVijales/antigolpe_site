@@ -27,7 +27,9 @@
               'card' => [
                   'icon' => $feature['icon'] ?? '',
                   'title' => $feature['title'] ?? '',
-                  'description' => $feature['description'] ?? ''
+                  'description' => $feature['description'] ?? '',
+                  'img_class' => $feature['img_class'] ?? '',
+                  'title_class' => $feature['title_class'] ?? ''
               ],
               'animationDirection' => $feature['animation'] ?? 'bottom'
           ]) ?>
