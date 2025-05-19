@@ -84,3 +84,5 @@ coverage/
 
 # Ignore environment file
 .env
+
+temp_diff.txt
