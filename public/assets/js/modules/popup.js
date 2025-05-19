@@ -85,7 +85,7 @@ export class PopupHandler {
             const closeButtons = document.querySelectorAll('.close-popup');
             closeButtons.forEach(button => {
                 button.addEventListener('click', () => {
-                    PopupHandler.closePopups();
+                    this.closePopups();
                 });
             });
 
@@ -93,13 +93,13 @@ export class PopupHandler {
             // Adicionado verificação para feedbackPopup
             window.addEventListener('click', (e) => {
                 if (this.signupPopup && e.target === this.signupPopup) {
-                    PopupHandler.closePopups();
+                    this.closePopups();
                 }
                 if (this.loginPopup && e.target === this.loginPopup) {
-                    PopupHandler.closePopups();
+                    this.closePopups();
                 }
                  if (this.feedbackPopup && e.target === this.feedbackPopup && e.target === e.currentTarget) {
-                     PopupHandler.closePopups();
+                     this.closePopups();
                  }
             });
 
@@ -107,7 +107,7 @@ export class PopupHandler {
              const feedbackCloseButton = document.querySelector('.feedback-close');
              if(feedbackCloseButton) {
                  feedbackCloseButton.addEventListener('click', () => {
-                     PopupHandler.closePopups(); // Usa closePopups para garantir que todos fechem
+                     this.closePopups(); // Usa closePopups para garantir que todos fechem
                  });
              }
         });
