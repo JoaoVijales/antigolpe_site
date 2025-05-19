@@ -5,24 +5,24 @@
   <h3 class="plan-title"><?= $plan['name'] ?></h3>
   
   <div class="plan-price">
-    <span class="currency">R$</span>
-    <span class="amount"><?= $plan['price'] ?></span>
+    <div class="text-price">
+      <span>
+        <span class="currency">R$</span>
+        <span class="amount"><?= $plan['price'] ?></span>
+      </span>
+    </div>
+    <div class="text-cents">,90</div>
   </div>
 
-  <ul class="benefits">
+  <ul class="text-plan">
     <?php foreach ($plan['benefits'] as $benefit) : ?>
-      <?php
-        $class = isset($benefit['highlight']) && $benefit['highlight'] ? 'highlight' : '';
-        echo "<li class=\"";
-        echo $class;
-        echo "\">";
-      ?>
-        <?= $benefit['text'] ?>
-      </li>
+      <li 
+      class="plan-benefit<?= $benefit['highlight'] ? 'highlight' : '' ?>">
+        <?= $benefit['text'] ?></li>
     <?php endforeach ?>
   </ul>
 
-  <button class="cta-button" data-plan="<?= $plan['id'] ?>">
+  <button class="cta-buton" data-plan="<?= $plan['id'] ?>">
     <?= $plan['button_text'] ?>
   </button>
 </article>
