@@ -56,7 +56,7 @@ class HomeController {
                 [
                     'id' => 'basic',
                     'name' => 'Básico',
-                    'price' => '47,90',
+                    'price' => '17',
                     'benefits' => [
                         ['text' => '5 análises por mês', 'highlight' => false],
                         ['text' => 'Suporte por email', 'highlight' => false]
@@ -67,7 +67,7 @@ class HomeController {
                 [
                     'id' => 'pro',
                     'name' => 'Profissional',
-                    'price' => '157,90',
+                    'price' => '97',
                     'benefits' => [
                         ['text' => 'Análises ilimitadas', 'highlight' => false],
                         ['text' => 'Suporte prioritário', 'highlight' => false],
@@ -80,7 +80,8 @@ class HomeController {
                 [
                     'id' => 'enterprise',
                     'name' => 'Empresarial',
-                    'price' => 'A partir de 197,90',
+                    'subtitle' => 'A partir de:',
+                    'price' => '57',
                     'benefits' => [
                         ['text' => 'Tudo do Plano Profissional', 'highlight' => false],
                         ['text' => 'Análise por demanda', 'highlight' => false],
