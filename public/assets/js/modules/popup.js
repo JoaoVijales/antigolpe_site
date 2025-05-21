@@ -56,6 +56,8 @@ export class PopupHandler {
         // Event Listeners para abrir popups (copiado do index.php)
         const showSignupLink = document.getElementById('showSignup');
         const showLoginLink = document.getElementById('showLogin');
+        const planbasic = document.getElementById('basic');
+        const planpro = document.getElementById('pro');
         // Adicionado listener para o botão "Começar Agora"
         const ctaButtons = document.querySelectorAll('.cta-buton');
 
@@ -76,7 +78,13 @@ export class PopupHandler {
         ctaButtons.forEach(button => {
             button.addEventListener('click', (e) => {
                 e.preventDefault();
-                this.openSignupPopup();
+                if (button.id === 'basic') {
+                    localStorage.setItem('plan', 'basic');
+                    this.openSignupPopup();
+                } else if (button.id === 'pro') {
+                    localStorage.setItem('plan', 'pro');
+                    this.openLoginPopup();
+                }
             });
         });
 

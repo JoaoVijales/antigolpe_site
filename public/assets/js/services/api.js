@@ -14,3 +14,33 @@ export class ApiService {
       return res.json();
     }
 }
+
+export class backendService {
+  static backendUrl = 'https://5851-2804-12a0-5005-c200-35f1-63e0-a86a-e924.ngrok-free.app ';
+
+
+  static async login(idToken) {
+    const response = await fetch(this.backendUrl + '/auth/login/', {
+      method: 'POST',
+      body: JSON.stringify({ 'firebaseToken':idToken })
+    });
+    const data = await response.json();
+    const authSucess = response.status;
+    return [authSucess, data];
+  }
+
+  static async register(idToken) {
+    try {
+      const response = await fetch(this.backendUrl + '/auth/register/', {
+        method: 'POST',
+        body: JSON.stringify({ 'firebaseToken':idToken })
+    });
+      const data = await response.json();
+      const authSucess = response.status;
+      return [authSucess, data];
+    } catch (error) {
+      console.error('Erro ao registrar:', error);
+      return [false, { error: 'Erro ao registrar' }];
+    }
+  }
+}

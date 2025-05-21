@@ -1,15 +1,8 @@
 // Gerencia fluxo de autenticação
-import { ApiService } from '../services/api.js';
+import { backendService } from '../services/api.js';
+
 // TODO: Verificar a origem e a necessidade de SessionManager e Ui
 // import { SessionManager } from './session.js'; // Exemplo
-
-// Importar Firebase (se ainda não estiver importado via script tags no HTML)
-// Se você estiver usando script tags globais no HTML como no exemplo anterior, não precisa desta importação.
-// Se estiver usando bundler (Webpack, Parcel, Vite) e quer importar, use:
-// import firebase from 'firebase/app';
-// import 'firebase/auth';
-// Se precisar do Firestore:
-// import 'firebase/firestore';
 
 export class AuthHandler {
     // TODO: Mover esta configuração para um arquivo de configuração externo seguro (como o usado no dashboard.html)
@@ -24,27 +17,22 @@ export class AuthHandler {
     };
 
     static auth = null;
-    static db = null; // Adicionar instância do Firestore, se necessário
+    static db = null; 
     static googleProvider = null;
-    static currentUser = null; // Para armazenar o usuário logado
-    static authStateObservers = []; // Para observadores do estado de autenticação
+    static currentUser = null; 
+    static authStateObservers = []; 
 
     static init() {
-      // Inicialize o Firebase se ainda não foi inicializado globalmente
       if (typeof firebase === 'undefined' || !firebase.apps.length) {
          firebase.initializeApp(AuthHandler.firebaseConfig);
       }
 
       this.auth = firebase.auth();
-      // Inicialize o Firestore se necessário (apenas se este backend PHP interagir com ele)
-      // this.db = firebase.firestore();
-
       this.googleProvider = new firebase.auth.GoogleAuthProvider();
-
       this.setupLoginForm();
       this.setupRegisterForm();
       this.setupGoogleAuth();
-      this.setupLogout(); // Adicionar configuração para logout
+      this.setupLogout();
 
       // Centralizar a verificação do estado de autenticação
       this.auth.onAuthStateChanged(user => {
@@ -68,6 +56,16 @@ export class AuthHandler {
     static getCurrentUser() {
         return this.currentUser;
     }
+    static getCurrentUserToken() {
+        idToken = localStorage.getItem('idToken');
+        return idToken;
+    }
+
+    static async verifyToken(idToken) {
+        const idToken = this.getCurrentUserToken()
+        const authSucess = await this.auth.verifyIdToken(idToken)
+        return authSucess;
+    }
 
     // Método para fazer logout
     static async logout() {
@@ -83,58 +81,24 @@ export class AuthHandler {
     }
 
     static setupLoginForm() {
-      // Usando o seletor do script inline para o formulário de login
       document.querySelector('.login-form')?.addEventListener('submit', async (e) => {
         e.preventDefault();
-        // Usando os IDs de input do script inline
-        const email = document.getElementById('loginEmail').value; // Ajustado para loginEmail ID do index.php
-        const password = document.getElementById('loginPassword').value; // Ajustado para loginPassword ID do index.php
-        
-        // SUBSTITUA 'URL_DO_SEU_OUTRO_BACKEND/endpoint_de_login_unificado' pela URL REAL do seu outro backend
-        const YOUR_OTHER_BACKEND_AUTH_URL = 'URL_DO_SEU_OUTRO_BACKEND/endpoint_de_login_unificado'; // <<< SUBSTITUA AQUI
+ 
+        const email = document.getElementById('loginEmail').value; 
+        const password = document.getElementById('loginPassword').value;
 
         try {
-          // 1. Autenticar com Email/Senha usando Firebase SDK (no frontend)
           const userCredential = await this.auth.signInWithEmailAndPassword(email, password);
-          const user = userCredential.user;
+          const idToken = userCredential.user.getIdToken();
 
+          // TODO: Remover em produção
           console.log('Login com Email/Senha bem-sucedido (Firebase frontend):', user);
-
-          // 2. Obter o ID Token do Firebase
-          const idToken = await user.getIdToken();
           console.log('Firebase ID Token obtido no frontend (Email/Senha):', idToken);
 
-          // 3. Enviar o ID Token para o SEU OUTRO BACKEND (mesmo fluxo do Google)
           try {
-               const backendResponse = await fetch(YOUR_OTHER_BACKEND_AUTH_URL, {
-                   method: 'POST',
-                   headers: {
-                       'Content-Type': 'application/json',
-                       // Se o seu OUTRO backend exigir algum cabeçalho adicional, adicione aqui:
-                       // 'X-CSRF-TOKEN': seuCSRFTokenAqui
-                   },
-                   body: JSON.stringify({ idToken: idToken }), // Envia o ID Token do Firebase
-                });
-
-                if (!backendResponse.ok) {
-                     const errorData = await backendResponse.json();
-                     throw new Error(errorData.error || 'Erro desconhecido no outro backend');
-                }
-
-                const data = await backendResponse.json();
-                console.log('Resposta do OUTRO backend (Email/Senha):', data);
-
-                // 4. Lidar com a resposta do OUTRO backend (Obter token, dados do usuário, etc.)
-                const authTokenFromOtherBackend = data.auth_token; // Exemplo: o outro backend retorna um campo 'auth_token'
-                const userDataFromOtherBackend = data.user; // Exemplo: o outro backend retorna dados do usuário
-
-                if (authTokenFromOtherBackend) {
-                    console.log('Token de autenticação do outro backend obtido:', authTokenFromOtherBackend);
-                    // TODO: Armazenar este authTokenFromOtherBackend (ex: localStorage, cookies seguros) para usar em requisições futuras
-                    // localStorage.setItem('otherBackendAuthToken', authTokenFromOtherBackend);
-                    // TODO: Armazenar dados básicos do usuário, se necessário
-                    // localStorage.setItem('userData', JSON.stringify(userDataFromOtherBackend));
-
+               const [authSucess, data] = await backendService.login(idToken);
+                if (authSucess == 200) {
+                    localStorage.setItem('idToken', idToken);
                     alert('Login com Email/Senha processado com sucesso pelo backend de autenticação!');
                     // TODO: Implementar redirecionamento para uma página autenticada (ex: dashboard)
                     // Ex: window.location.href = '/dashboard';
@@ -143,13 +107,16 @@ export class AuthHandler {
                      //     PopupHandler.closePopups();
                      // }
                 } else {
+                    // TODO: Remover em produção
                      console.error('Resposta do outro backend não contém token de autenticação.', data);
+
                      alert('Erro ao processar login: Token não recebido do servidor de autenticação.');
                      // TODO: Mostrar erro na UI do popup
                 }
 
             } catch (backendFetchError) {
                  console.error('Erro na comunicação com o outro backend:', backendFetchError);
+                 
                  alert('Ocorreu um erro de rede ao tentar comunicar com o servidor de autenticação.');
                  // TODO: Mostrar erro na UI do popup
             }
@@ -164,75 +131,34 @@ export class AuthHandler {
     }
 
     static setupRegisterForm() {
-        // Adicionando a configuração para o formulário de registro do script inline
-        // Usando o seletor do script inline para o formulário de cadastro
         document.querySelector('.signup-form')?.addEventListener('submit', async (e) => {
             e.preventDefault();
-            // Usando os IDs de input do script inline
-            const email = document.getElementById('email').value; // TODO: Verificar se o ID é 'email' no formulário de cadastro
-            const password = document.getElementById('password').value; // TODO: Verificar se o ID é 'password' no formulário de cadastro
-            // const name = document.getElementById('name')?.value; // Removido, Firebase Auth cria usuário básico primeiro
 
-            // SUBSTITUA 'URL_DO_SEU_OUTRO_BACKEND/endpoint_de_registro_unificado' pela URL REAL do seu outro backend
-            // Nota: Muitos backends usam um único endpoint para receber o token após *qualquer* método de login.
-            // Se o seu outro backend tiver um endpoint específico para registro, use-o aqui.
-            // Se o seu outro backend espera o token após o registro, use a mesma URL do login.
-            const YOUR_OTHER_BACKEND_REGISTER_URL = 'URL_DO_SEU_OUTRO_BACKEND/endpoint_de_registro_unificado'; // <<< SUBSTITUA AQUI
+            const email = document.getElementById('email').value; 
+            const password = document.getElementById('password').value; 
 
             try {
-                // 1. Criar usuário com Email/Senha usando Firebase SDK (no frontend)
                 const userCredential = await this.auth.createUserWithEmailAndPassword(email, password);
-                const user = userCredential.user;
+                const idToken = userCredential.user.getIdToken();
 
                 console.log('Registro com Email/Senha bem-sucedido (Firebase frontend):', user);
-
-                 // Opcional: Atualizar perfil (nome, etc.) após a criação
-                 // if (name) {
-                 //     await user.updateProfile({ displayName: name });
-                 //     console.log('Perfil do usuário atualizado com nome.');
-                 // }
-
-                // 2. Obter o ID Token do Firebase
-                const idToken = await user.getIdToken();
-                console.log('Firebase ID Token obtido no frontend (Registro Email/Senha):', idToken);
-
-                // 3. Enviar o ID Token para o SEU OUTRO BACKEND (mesmo fluxo do Google/Login Email/Senha)
                  try {
-                     const backendResponse = await fetch(YOUR_OTHER_BACKEND_REGISTER_URL, { // Pode ser a mesma URL do login
-                         method: 'POST',
-                         headers: {
-                             'Content-Type': 'application/json',
-                             // Se o seu OUTRO backend exigir algum cabeçalho adicional, adicione aqui:
-                             // 'X-CSRF-TOKEN': seuCSRFTokenAqui
-                         },
-                         body: JSON.stringify({ idToken: idToken, email: email, password: password }), // Envia o ID Token (e opcionalmente email/senha se o backend precisar para lookup ou criação inicial)
-                      });
+                     const [authSucess, data] = await backendService.register(idToken);
+                     if (authSucess) {
+                        localStorage.setItem('idToken', idToken);
 
-                      if (!backendResponse.ok) {
-                          const errorData = await backendResponse.json();
-                          throw new Error(errorData.error || 'Erro desconhecido no outro backend');
-                      }
+                        alert('Registro com Email/Senha processado com sucesso pelo backend de autenticação!');
+                        // TODO: Implementar redirecionamento para uma página autenticada
+                        const plan = localStorage.getItem('plan');
+                        if (plan === 'basic') {
+                          window.location.href = 'https://buy.stripe.com/6oU5kCdM5gsceHh0lz9MY00';
+                        } else if (plan === 'pro') {
+                          window.location.href = '/https://buy.stripe.com/6oU8wOazT4JufLl0lz9MY01';
+                        }
+                     } else {
+                      console.error('Resposta do outro backend não contém token de autenticação.', data);
+                      alert('Erro ao processar registro: Token não recebido do servidor de autenticação.');
 
-                      const data = await backendResponse.json();
-                      console.log('Resposta do OUTRO backend (Registro Email/Senha):', data);
-
-                     // 4. Lidar com a resposta do OUTRO backend (Obter token, dados do usuário, etc.)
-                     const authTokenFromOtherBackend = data.auth_token; // Exemplo
-                     const userDataFromOtherBackend = data.user; // Exemplo
-
-                     if (authTokenFromOtherBackend) {
-                         console.log('Token de autenticação do outro backend obtido:', authTokenFromOtherBackend);
-                         // TODO: Armazenar este authTokenFromOtherBackend
-                         // TODO: Armazenar dados básicos do usuário
-
-                         alert('Registro com Email/Senha processado com sucesso pelo backend de autenticação!');
-                         // TODO: Implementar redirecionamento para uma página autenticada
-                          // Ex: window.location.href = '/dashboard';
-                          // Opcional: Fechar o popup de registro
-                          // if (typeof PopupHandler !== 'undefined' && PopupHandler.closePopups) {\n                          //     PopupHandler.closePopups();\n                          // }\n                     } else {
-                          console.error('Resposta do outro backend não contém token de autenticação.', data);
-                          alert('Erro ao processar registro: Token não recebido do servidor de autenticação.');
-                          // TODO: Mostrar erro na UI do popup
                      }
 
                  } catch (backendFetchError) {
@@ -256,68 +182,29 @@ export class AuthHandler {
           try {
             // 1. Iniciar o fluxo de login com Google usando o SDK do Firebase (no frontend)
             const result = await this.auth.signInWithPopup(this.googleProvider);
-            const user = result.user;
-            console.log('Login com Google bem-sucedido (Firebase frontend):', user);
-
-            // 2. Obter o ID Token do Firebase
-            const idToken = await user.getIdToken();
+            const idToken = result.user.getIdToken();
+            // TODO: Remover em produção
+            console.log('Login com Google bem-sucedido (Firebase frontend):', idToken);
             console.log('Firebase ID Token obtido no frontend:', idToken);
 
-            // 3. Enviar o ID Token para o SEU OUTRO BACKEND para verificação e criação de sessão lá
-            // SUBSTITUA 'URL_DO_SEU_OUTRO_BACKEND/endpoint_de_login_google' pela URL REAL
-            // Use a mesma URL unificada se o seu outro backend tiver um endpoint para receber tokens de qualquer origem
-            const YOUR_OTHER_BACKEND_AUTH_URL = 'URL_DO_SEU_OUTRO_BACKEND/endpoint_de_login_unificado'; // <<< SUBSTITUA AQUI
-
             try {
-                const backendResponse = await fetch(YOUR_OTHER_BACKEND_AUTH_URL, {
-                   method: 'POST',
-                   headers: {
-                       'Content-Type': 'application/json',
-                       // Se o seu OUTRO backend exigir algum cabeçalho adicional, adicione aqui:
-                       // 'X-CSRF-TOKEN': seuCSRFTokenAqui
-                   },
-                   body: JSON.stringify({ idToken: idToken }), // Envia o ID Token do Firebase
-                });
-
-                if (!backendResponse.ok) {
-                     // Lidar com erros retornados pelo OUTRO backend
-                     const errorData = await backendResponse.json();
-                     const errorMessage = errorData.error || 'Erro desconhecido no outro backend';
-                     console.error('Erro no outro backend:', errorData);
-                     alert('Erro ao processar login no servidor: ' + errorMessage);
-                     // TODO: Mostrar erro na UI do popup
-                     return; // Parar o fluxo em caso de erro no backend
-                }
-                const data = await backendResponse.json();
-                console.log('Resposta do OUTRO backend:', data);
-
-                // 4. Lidar com a resposta do OUTRO backend
-                // O OUTRO backend deve retornar um token de autenticação para ser usado NESTE frontend
-                // para requisições subsequentes ao SEU OUTRO BACKEND (ou talvez a este backend PHP, dependendo da arquitetura)
-                const authTokenFromOtherBackend = data.auth_token; // Exemplo: o outro backend retorna um campo 'auth_token'
-                const userDataFromOtherBackend = data.user; // Exemplo: o outro backend retorna dados do usuário
-
-                if (authTokenFromOtherBackend) {
-                    console.log('Token de autenticação do outro backend obtido:', authTokenFromOtherBackend);
-                    // TODO: Armazenar este authTokenFromOtherBackend (ex: localStorage, cookies seguros) para usar em requisições futuras ao OUTRO backend
-                    // localStorage.setItem('otherBackendAuthToken', authTokenFromOtherBackend);
-                    // TODO: Armazenar dados básicos do usuário, se necessário
-                    // localStorage.setItem('userData', JSON.stringify(userDataFromOtherBackend));
-                    alert('Login processado com sucesso pelo backend de autenticação!');
-                    // TODO: Implementar redirecionamento para uma página autenticada (ex: dashboard)
-                    // Certifique-se de que a página de destino use o authTokenFromOtherBackend para requisições
-                    // Ex: window.location.href = '/dashboard';
-                     // Opcional: Fechar o popup de login
-                     // if (typeof PopupHandler !== 'undefined' && PopupHandler.closePopups) {
-                     //     PopupHandler.closePopups();
-                     // }
+                const [authSucess, data] = await backendService.login(idToken);
+                if (authSucess) {
+                    localStorage.setItem('idToken', idToken);
+                    
+                    const plan = localStorage.getItem('plan');
+                    if (plan === 'basic') {
+                      window.location.href = 'https://buy.stripe.com/6oU5kCdM5gsceHh0lz9MY00';
+                    } else if (plan === 'pro') {
+                      window.location.href = '/https://buy.stripe.com/6oU8wOazT4JufLl0lz9MY01';
+                    }
                 } else {
+                    // TODO: Remover em produção
                      console.error('Resposta do outro backend não contém token de autenticação.', data);
                      alert('Erro ao processar login: Token não recebido do servidor de autenticação.');
                      // TODO: Mostrar erro na UI do popup
                 }
             } catch (backendFetchError) {
-                // Erro na comunicação HTTP com o OUTRO backend
                 console.error('Erro na comunicação com o outro backend:', backendFetchError);
                 alert('Ocorreu um erro de rede ao tentar comunicar com o servidor de autenticação.');
                 // TODO: Mostrar erro na UI do popup
