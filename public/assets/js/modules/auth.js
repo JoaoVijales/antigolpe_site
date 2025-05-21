@@ -89,7 +89,7 @@ export class AuthHandler {
 
         try {
           const userCredential = await this.auth.signInWithEmailAndPassword(email, password);
-          const idToken = userCredential.user.getIdToken();
+          const idToken = await userCredential.user.getIdToken();
 
           // TODO: Remover em produção
           console.log('Login com Email/Senha bem-sucedido (Firebase frontend):', user);
@@ -139,7 +139,7 @@ export class AuthHandler {
 
             try {
                 const userCredential = await this.auth.createUserWithEmailAndPassword(email, password);
-                const idToken = userCredential.user.getIdToken();
+                const idToken = await userCredential.user.getIdToken();
 
                 console.log('Registro com Email/Senha bem-sucedido (Firebase frontend):', user);
                  try {
@@ -182,7 +182,7 @@ export class AuthHandler {
           try {
             // 1. Iniciar o fluxo de login com Google usando o SDK do Firebase (no frontend)
             const result = await this.auth.signInWithPopup(this.googleProvider);
-            const idToken = result.user.getIdToken();
+            const idToken = await result.user.getIdToken();
             // TODO: Remover em produção
             console.log('Login com Google bem-sucedido (Firebase frontend):', idToken);
             console.log('Firebase ID Token obtido no frontend:', idToken);
