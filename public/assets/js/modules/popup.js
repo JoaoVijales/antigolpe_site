@@ -78,10 +78,10 @@ export class PopupHandler {
         ctaButtons.forEach(button => {
             button.addEventListener('click', (e) => {
                 e.preventDefault();
-                if (button.id === 'basic') {
+                if (button.id === 'planbasic') {
                     localStorage.setItem('plan', 'basic');
                     this.openSignupPopup();
-                } else if (button.id === 'pro') {
+                } else if (button.id === 'planpro') {
                     localStorage.setItem('plan', 'pro');
                     this.openLoginPopup();
                 }

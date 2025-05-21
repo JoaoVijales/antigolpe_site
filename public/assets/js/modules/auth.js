@@ -62,7 +62,7 @@ export class AuthHandler {
     }
 
     static async verifyToken(idToken) {
-        const idToken = this.getCurrentUserToken()
+        const idToken =  localStorage.getItem('idToken')
         const authSucess = await this.auth.verifyIdToken(idToken)
         return authSucess;
     }
@@ -191,12 +191,16 @@ export class AuthHandler {
                 const [authSucess, data] = await backendService.login(idToken);
                 if (authSucess) {
                     localStorage.setItem('idToken', idToken);
-                    
-                    const plan = localStorage.getItem('plan');
-                    if (plan === 'basic') {
-                      window.location.href = 'https://buy.stripe.com/6oU5kCdM5gsceHh0lz9MY00';
-                    } else if (plan === 'pro') {
-                      window.location.href = '/https://buy.stripe.com/6oU8wOazT4JufLl0lz9MY01';
+                    if (btn.id === 'google-loginPopup') {
+                      window.location.href = '/dashboard';
+                    }
+                    else if (btn.id === 'google-signupPopup') {
+                      const plan = localStorage.getItem('plan');
+                      if (plan === 'basic') {
+                        window.location.href = 'https://buy.stripe.com/6oU5kCdM5gsceHh0lz9MY00';
+                      } else if (plan === 'pro') {
+                        window.location.href = '/https://buy.stripe.com/6oU8wOazT4JufLl0lz9MY01';
+                      }
                     }
                 } else {
                     // TODO: Remover em produção

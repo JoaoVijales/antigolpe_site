@@ -50,7 +50,7 @@
     <?php endforeach ?>
   </ul>
 
-  <button id="<?= $plan['id'] ?>" class="cta-buton" data-plan="<?= $plan['id'] ?>">
+  <button id="<?= $plan['plan_id'] ?>" class="cta-buton" data-plan="<?= $plan['id'] ?>">
     <span class="button-text">
       <?= $plan['button_text'] ?>
     </span>

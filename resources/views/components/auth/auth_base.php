@@ -5,7 +5,7 @@
     <div class="popup-content">
         <button class="close-popup" aria-label="Fechar popup">&times;</button>
         <h2 class="popup-title"><?= $title ?></h2>    
-        <button class="google-btn">
+        <button class="google-btn" id="google-<?= $id ?>">
         <img src="https://www.google.com/favicon.ico" alt="Ícone do Google" class="google-icon">
         <span>Continuar com o Google</span>
         </button>

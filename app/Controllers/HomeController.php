@@ -55,6 +55,7 @@ class HomeController {
             'plans' => [
                 [
                     'id' => 'basic',
+                    'plan_id' => 'planbasic',
                     'name' => 'Básico',
                     'price' => '17',
                     'benefits' => [
@@ -66,6 +67,7 @@ class HomeController {
                 ],
                 [
                     'id' => 'pro',
+                    'plan_id' => 'planpro',
                     'name' => 'Profissional',
                     'price' => '97',
                     'benefits' => [
