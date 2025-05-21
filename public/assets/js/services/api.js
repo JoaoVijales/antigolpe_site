@@ -37,6 +37,41 @@ export class backendService {
     return [authSucess, data];
   }
 
+  static async login_google(idToken) {
+    const response = await fetch(this.backendUrl + '/auth/login_google/', {
+      method: 'POST',
+      // TODO: Refatorar: Este cabeçalho é específico para ngrok gratuito. Remover em produção.
+      headers: { 'ngrok-skip-browser-warning': 'true' },
+      body: JSON.stringify({ 'firebaseToken':idToken })
+    });
+    const data = await response.json();
+    const authSucess = response.status;
+    return [authSucess, data];
+  }
+
+  static async update_phone(phone, code, idToken) {
+    const response = await fetch(this.backendUrl + '/auth/update-phone/', {
+      method: 'POST',
+      // TODO: Refatorar: Este cabeçalho é específico para ngrok gratuito. Remover em produção.
+      headers: { 'ngrok-skip-browser-warning': 'true' },
+      body: JSON.stringify({ 'phone':phone, 'code':code, 'firebaseToken':idToken })
+    });
+    const data = await response.json();
+    const authSucess = response.status;
+    return [authSucess, data];
+  }
+
+  static async verify_phone(phone, idToken) {
+    const response = await fetch(this.backendUrl + '/auth/verify-phone/', {
+      method: 'POST',
+      headers: { 'ngrok-skip-browser-warning': 'true' },
+      body: JSON.stringify({ 'phone':phone, 'firebaseToken':idToken })
+    });
+    const data = await response.json();
+    const authSucess = response.status;
+    return [authSucess, data];
+  }
+
   static async register(idToken) {
     try {
       const response = await fetch(this.backendUrl + '/auth/register/', {
@@ -54,3 +89,5 @@ export class backendService {
     }
   }
 }
+
+

@@ -79,13 +79,22 @@ export class PopupHandler {
             button.addEventListener('click', (e) => {
                 e.preventDefault();
                 // Modificado para usar button.dataset.plan
+                    
                 const plan = button.dataset.plan;
-                if (plan === 'basic') {
+
+                if (localStorage.getItem('idToken')) {
+                    if (plan === 'basic') {
+                        window.location.href = 'https://buy.stripe.com/6oU5kCdM5gsceHh0lz9MY00';
+                    } else if (plan === 'pro') {
+                        window.location.href = '/https://buy.stripe.com/6oU8wOazT4JufLl0lz9MY01';
+                    }
+                }
+                else if (plan === 'basic') {
                     localStorage.setItem('plan', 'basic');
                     this.openSignupPopup();
                 } else if (plan === 'pro') {
                     localStorage.setItem('plan', 'pro');
-                    this.openLoginPopup(); // Abrir login para o plano pro conforme lógica anterior
+                    this.openSignupPopup(); // Abrir login para o plano pro conforme lógica anterior
                 }
             });
         });

@@ -13,5 +13,6 @@ return function (RouteCollector $r) {
         $r->addRoute('GET', '/', [App\Controllers\HomeController::class, 'index']);
         $r->addRoute('GET', '/dashboard', [App\Controllers\DashboardController::class, 'securityDashboard']);
         $r->addRoute('GET', '/404', [App\Controllers\HomeController::class, 'notFound']);
+        $r->addRoute('GET', '/dashboard/verify-whatsapp', [App\Controllers\DashboardController::class, 'verifyWhatsapp']);
     });
 };

@@ -192,18 +192,21 @@ export class AuthHandler {
             console.log('Firebase ID Token obtido no frontend:', idToken);
 
             try {
-                const [authSucess, data] = await backendService.login(idToken);
-                if (authSucess) {
+                const [authSucess, data] = await backendService.login_google(idToken);
+                if (authSucess == 200) {
                     localStorage.setItem('idToken', idToken);
+                    const uid = data.uid;
                     if (btn.id === 'google-loginPopup') {
                       window.location.href = '/dashboard';
                     }
                     else if (btn.id === 'google-signupPopup') {
                       const plan = localStorage.getItem('plan');
                       if (plan === 'basic') {
-                        window.location.href = 'https://buy.stripe.com/6oU5kCdM5gsceHh0lz9MY00';
+                        url = 'https://buy.stripe.com/6oU5kCdM5gsceHh0lz9MY00?client_reference_id=' + uid;
+                        window.location.href = url  ;
                       } else if (plan === 'pro') {
-                        window.location.href = '/https://buy.stripe.com/6oU8wOazT4JufLl0lz9MY01';
+                        url = 'https://buy.stripe.com/6oU8wOazT4JufLl0lz9MY01?client_reference_id=' + uid;
+                        window.location.href = url;
                       }
                     }
                 } else {
