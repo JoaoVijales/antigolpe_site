@@ -16,7 +16,7 @@ export class ApiService {
 }
 
 export class backendService {
-  static backendUrl = 'https://5851-2804-12a0-5005-c200-35f1-63e0-a86a-e924.ngrok-free.app ';
+  static backendUrl = 'https://5851-2804-12a0-5005-c200-35f1-63e0-a86a-e924.ngrok-free.app';
 
 
   static async login(idToken) {

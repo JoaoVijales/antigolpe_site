@@ -56,8 +56,8 @@ export class PopupHandler {
         // Event Listeners para abrir popups (copiado do index.php)
         const showSignupLink = document.getElementById('showSignup');
         const showLoginLink = document.getElementById('showLogin');
-        const planbasic = document.getElementById('basic');
-        const planpro = document.getElementById('pro');
+        // REMOVIDO: const planbasic = document.getElementById('basic'); // Não usado
+        // REMOVIDO: const planpro = document.getElementById('pro'); // Não usado
         // Adicionado listener para o botão "Começar Agora"
         const ctaButtons = document.querySelectorAll('.cta-buton');
 
@@ -78,12 +78,14 @@ export class PopupHandler {
         ctaButtons.forEach(button => {
             button.addEventListener('click', (e) => {
                 e.preventDefault();
-                if (button.id === 'planbasic') {
+                // Modificado para usar button.dataset.plan
+                const plan = button.dataset.plan;
+                if (plan === 'basic') {
                     localStorage.setItem('plan', 'basic');
                     this.openSignupPopup();
-                } else if (button.id === 'planpro') {
+                } else if (plan === 'pro') {
                     localStorage.setItem('plan', 'pro');
-                    this.openLoginPopup();
+                    this.openLoginPopup(); // Abrir login para o plano pro conforme lógica anterior
                 }
             });
         });
@@ -105,7 +107,8 @@ export class PopupHandler {
             if (this.loginPopup && e.target === this.loginPopup) {
                 this.closePopups();
             }
-                if (this.feedbackPopup && e.target === this.feedbackPopup && e.target === e.currentTarget) {
+                // Corrigido a condição para fechar feedbackPopup ao clicar fora
+                if (this.feedbackPopup && e.target === this.feedbackPopup) {
                     this.closePopups();
                 }
         });
