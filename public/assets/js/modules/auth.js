@@ -61,10 +61,14 @@ export class AuthHandler {
         return idToken;
     }
 
-    static async verifyToken(idToken) {
+    static async verifyToken() {
+      if (localStorage.getItem('idToken') == null) {
         const idToken =  localStorage.getItem('idToken')
         const authSucess = await this.auth.verifyIdToken(idToken)
         return authSucess;
+      } else {
+        return false;
+      }
     }
 
     // Método para fazer logout
