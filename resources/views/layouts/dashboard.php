@@ -93,5 +93,11 @@
   }
   ?>
   <script type="module" src="<?= View::asset('js/main.js') ?>"></script>
+  <script type="module">
+    const idToken = localStorage.getItem('idToken');
+    if (!idToken) {
+      window.location.href = '/';
+    }
+  </script>
 </body>
 </html>

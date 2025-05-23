@@ -173,6 +173,9 @@ export class AuthHandler {
                         } else if (plan_selected === 'pro') {
                           window.location.href = '/https://buy.stripe.com/6oU8wOazT4JufLl0lz9MY01';
                         }
+                        else {
+                          window.location.href = '/dashboard/';
+                        }
                      } else {
                       console.error('Resposta do outro backend não contém token de autenticação.', data);
                       alert('Erro ao processar registro: Token não recebido do servidor de autenticação.');
@@ -231,6 +234,9 @@ export class AuthHandler {
                       } else if (plan_selected === 'pro') {
                         url = 'https://buy.stripe.com/6oU8wOazT4JufLl0lz9MY01?client_reference_id=' + uid;
                         window.location.href = url;
+                      }
+                      else {
+                        window.location.href = '/dashboard/';
                       }
                     }
                 } else {
