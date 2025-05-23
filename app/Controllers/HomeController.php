@@ -10,8 +10,8 @@ class HomeController {
         $htmlContent = View::render('pages/home', [
             'title' => 'AntiGolpe - Proteção contra golpes',
             'hero' => [
-                'title' => 'Pare de cair em golpes',
-                'subtitle' => 'Verifique anúncios em segundos',
+                'title' => 'Pare de cair em golpes: verifique anúncios em segundos',
+                'subtitle' => 'Envie o link ou screenshot do anúncio e receba um veredicto de segurança via WhatsApp em minutos.',
                 'image' => 'images/hero-mockup.png'
             ],
             'features' => [
