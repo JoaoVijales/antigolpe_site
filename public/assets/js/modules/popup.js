@@ -79,21 +79,20 @@ export class PopupHandler {
             button.addEventListener('click', (e) => {
                 e.preventDefault();
                 // Modificado para usar button.dataset.plan
-                    
-                const plan = button.dataset.plan;
+                const plan_selected = button.dataset.plan;
 
                 if (localStorage.getItem('idToken')) {
-                    if (plan === 'basic') {
+                    if (plan_selected === 'basic') {
                         window.location.href = 'https://buy.stripe.com/6oU5kCdM5gsceHh0lz9MY00';
                     } else if (plan === 'pro') {
                         window.location.href = '/https://buy.stripe.com/6oU8wOazT4JufLl0lz9MY01';
                     }
                 }
-                else if (plan === 'basic') {
-                    localStorage.setItem('plan', 'basic');
+                else if (plan_selected === 'basic') {
+                    localStorage.setItem('plan_selected', 'basic');
                     this.openSignupPopup();
-                } else if (plan === 'pro') {
-                    localStorage.setItem('plan', 'pro');
+                } else if (plan_selected === 'pro') {
+                    localStorage.setItem('plan_selected', 'pro');
                     this.openSignupPopup(); // Abrir login para o plano pro conforme lógica anterior
                 }
             });

@@ -421,6 +421,18 @@ menu, ol, ul {
   position: relative;
 }
 
+.plans_dashboard {
+  padding: 75px 150px;
+  display: none;
+  flex-direction: column;
+  gap: 32px;
+  align-items: center;
+  justify-content: flex-start;
+  flex-shrink: 0;
+  width: 100%;
+  position: relative;
+}
+
 .container-plans {
   display: flex;
   flex-direction: row;
@@ -737,6 +749,13 @@ menu, ol, ul {
 }
 .form-contact {
   display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+}
+.form-basic {
+  display: none;
   flex-direction: column;
   gap: 10px;
   align-items: center;

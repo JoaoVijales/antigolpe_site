@@ -16,7 +16,11 @@ class View {
 
         // Se não for uma partial, inclui o layout
         if (!str_contains($template, 'components/')) {
-            return self::renderWithLayout($content, $data);
+            if (str_contains($template, 'dashboard')) {
+                return self::renderWithLayoutDashboard($content, $data);
+            } else {
+                return self::renderWithLayout($content, $data);
+            }
         }
         
         return $content;
@@ -26,6 +30,13 @@ class View {
         extract($data);
         ob_start();
         include self::$basePath . 'layouts/base.php';
+        return ob_get_clean();
+    }
+
+    private static function renderWithLayoutDashboard(string $content, array $data): string {
+        extract($data);
+        ob_start();
+        include self::$basePath . 'layouts/dashboard.php';
         return ob_get_clean();
     }
 

@@ -1,0 +1,231 @@
+.footer-title {
+  font-style: normal;
+}
+
+@media (max-width: 800px) {
+  body {
+    padding-left: 0;
+    padding-right: 0;
+    overflow-x: hidden;
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  video,
+  iframe {
+    max-width: 100%;
+    height: auto;
+  }
+
+  .menu {
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .menu-nav {
+    display: none;
+  }
+
+  .hero {
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    flex-direction: column;
+    height: 70vh;
+    width: 100%;
+    gap: 32px;
+    overflow-x: hidden;
+  }
+
+.hero-title {
+    text-align: center;
+  }
+
+  .hero_text {
+    font-size: 1rem;
+  }
+
+  .hero-content {
+    padding-left: 2rem;
+    padding-right: 2rem;
+    width: 100%;
+    text-align: center;
+    align-items: center;
+    overflow-x: hidden;
+  }
+
+  .text {
+    padding-left: 0;
+    padding-right: 0;
+    width: 100%;
+    text-align: center;
+  }
+
+  .hero-img {
+    padding-left: 0;
+    padding-right: 0;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    overflow-x: hidden;
+  }
+
+  .whtsp-mockup {
+    width: 80%;
+    height: auto;
+  }
+
+  .features {
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 32px;
+    padding-bottom: 32px;
+    overflow-x: hidden;
+  }
+
+  .features-grid,
+  .grid-row-a,
+  .grid-row-b {
+    padding-left: 0;
+    padding-right: 0;
+    flex-direction: column;
+    gap: 32px;
+    height: auto;
+    width: 100%;
+    align-items: center;
+    overflow-x: hidden;
+  }
+
+  .grid-row-b {
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  .features-card {
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    width: 80%;
+    max-width: 250px;
+    overflow-x: hidden;
+  }
+
+  .plans {
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 32px;
+    padding-bottom: 32px;
+    overflow-x: hidden;
+  }
+
+  .container-plans {
+    padding-left: 0;
+    padding-right: 0;
+    flex-direction: column;
+    gap: 32px;
+    width: 100%;
+    align-items: center;
+    overflow-x: hidden;
+  }
+
+  .card {
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 2.5rem;
+    padding-bottom: 2.5rem;
+    width: 80%;
+    max-width: 300px;
+    min-width: unset;
+    overflow-x: hidden;
+  }
+
+  .faq {
+    padding-left: 2rem;
+    padding-right: 2rem;
+    padding-top: 32px;
+    padding-bottom: 32px;
+    overflow-x: hidden;
+  }
+
+  .faq-container {
+    gap: 3rem;
+  }
+
+  .footer {
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 32px;
+    padding-bottom: 1rem;
+    overflow-x: hidden;
+  }
+
+  .footer-container {
+    padding-left: 0;
+    padding-right: 0;
+    flex-direction: column;
+    gap: 32px;
+    align-items: center;
+    overflow-x: hidden;
+  }
+
+  .contact-content {
+    padding-left: 0;
+    padding-right: 0;
+    flex-direction: column;
+    gap: 32px;
+    align-items: center;
+    overflow-x: hidden;
+    width: 100%;
+  }
+
+  .footer-content {
+    padding-left: 0;
+    padding-right: 0;
+    align-items: center;
+    text-align: center;
+    overflow-x: hidden;
+    width: 100%;
+  }
+
+  .form-contact {
+    padding-left: 0;
+    padding-right: 0;
+    width: 100%;
+    overflow-x: hidden;
+  }
+
+  .input-email,
+  .contact-buton {
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    width: 80%;
+    max-width: 300px;
+  }
+
+  .popup-content {
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+    width: 95%;
+    overflow-x: hidden;
+  }
+
+  .google-btn span {
+    font-size: 0.9rem;
+  }
+}

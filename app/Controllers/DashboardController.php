@@ -7,26 +7,8 @@ use App\Utils\HtmlResponse;
 
 class DashboardController {
     public function index(): HtmlResponse {
-        $htmlContent = View::render('pages/dashboard', [
+        $htmlContent = View::render('pages/dashboard/plans', [
             'title' => 'AntiGolpe - Proteção contra golpes',
-            'form_data' => [
-                'id' => 'form-basic',
-                'id_button' => 'update_phone',
-                'id_input' => 'phone',
-                'title' => 'Cadastre seu Whatsapp para continuar',
-                'description' => 'Para continuar, cadastre seu numero Whatsapp, você recebera um código de verificação por sms.',
-                'form_action' => '',
-                'phone_input_placeholder' => 'Digite seu Whatsapp'
-            ],
-            'verify_whatsapp_data' => [
-                'id' => 'form-verify-whatsapp',
-                'id_button' => 'verify_whatsapp',
-                'id_input' => 'code',
-                'title' => 'Verifique seu Whatsapp',
-                'description' => 'Para continuar, verifique seu numero Whatsapp, você recebera um código de verificação por sms.',
-                'form_action' => '',
-                'phone_input_placeholder' => 'Digite seu código de verificação'
-            ],
             'plans' => [
                 [
                     'id' => 'basic',
@@ -75,4 +57,45 @@ class DashboardController {
         return new HtmlResponse(200, $htmlContent);
     }
 
+    public function config(): HtmlResponse {
+        $htmlContent = View::render('pages/dashboard/config', [
+            'title' => 'AntiGolpe - Configurações',
+            
+        ]);
+
+        return new HtmlResponse(200, $htmlContent);
+    }
+
+    public function register_phone(): HtmlResponse {
+        $htmlContent = View::render('pages/dashboard/register_phone', [
+            'title' => 'AntiGolpe - Cadastro de Whatsapp',
+            'form_data' => [
+                'id' => 'form-basic',
+                'id_button' => 'update_phone',
+                'id_input' => 'phone',
+                'title' => 'Cadastre seu Whatsapp para continuar',
+                'description' => 'Para continuar, cadastre seu numero Whatsapp, você recebera um código de verificação por sms.',
+                'form_action' => '',
+                'phone_input_placeholder' => 'Digite seu Whatsapp'
+            ],
+        ]);
+        return new HtmlResponse(200, $htmlContent);
+    }
+
+    public function verify_phone(): HtmlResponse {
+        $htmlContent = View::render('pages/dashboard/verify_phone', [
+            'title' => 'AntiGolpe - Verificação de Whatsapp',
+            'verify_whatsapp_data' => [
+                'id' => 'form-verify-whatsapp',
+                'id_button' => 'verify_whatsapp',
+                'id_input' => 'code',
+                'title' => 'Verifique seu Whatsapp',
+                'description' => 'Para continuar, verifique seu numero Whatsapp, você recebera um código de verificação por sms.',
+                'form_action' => '',
+                'phone_input_placeholder' => 'Digite seu código de verificação'
+            ],
+        ]);
+        return new HtmlResponse(200, $htmlContent);
+    }
+    
 }

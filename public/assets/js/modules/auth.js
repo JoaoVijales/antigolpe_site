@@ -104,12 +104,24 @@ export class AuthHandler {
                 if (authSucess == 200) {
                     localStorage.setItem('idToken', idToken);
                     alert('Login com Email/Senha processado com sucesso pelo backend de autenticação!');
-                    // TODO: Implementar redirecionamento para uma página autenticada (ex: dashboard)
-                    // Ex: window.location.href = '/dashboard';
-                     // Opcional: Fechar o popup de login
-                     // if (typeof PopupHandler !== 'undefined' && PopupHandler.closePopups) {
-                     //     PopupHandler.closePopups();
-                     // }
+                    
+                    const email = data.email;
+                    localStorage.setItem('email', email);
+                    const phone = data.phone;
+                    localStorage.setItem('phone', phone);
+                    const plan_backend = data.plan;
+                    localStorage.setItem('plan_backend', plan_backend);
+                    
+                    if (plan_backend === 'Free') {
+                      window.location.href = '/dashboard/';
+                    } else {
+                      if (phone == null) {
+                        window.location.href = '/dashboard/register-phone';
+                      } else {
+                        window.location.href = '/dashboard/config';
+                      }
+                    }
+                    
                 } else {
                     // TODO: Remover em produção
                      console.error('Resposta do outro backend não contém token de autenticação.', data);
@@ -148,15 +160,17 @@ export class AuthHandler {
                 console.log('Registro com Email/Senha bem-sucedido (Firebase frontend):', user);
                  try {
                      const [authSucess, data] = await backendService.register(idToken);
+                     const email = data.email;
+                     localStorage.setItem('email', email);
                      if (authSucess) {
                         localStorage.setItem('idToken', idToken);
 
                         alert('Registro com Email/Senha processado com sucesso pelo backend de autenticação!');
                         // TODO: Implementar redirecionamento para uma página autenticada
-                        const plan = localStorage.getItem('plan');
-                        if (plan === 'basic') {
+                        const plan_selected = localStorage.getItem('plan_selected');
+                        if (plan_selected === 'basic') {
                           window.location.href = 'https://buy.stripe.com/6oU5kCdM5gsceHh0lz9MY00';
-                        } else if (plan === 'pro') {
+                        } else if (plan_selected === 'pro') {
                           window.location.href = '/https://buy.stripe.com/6oU8wOazT4JufLl0lz9MY01';
                         }
                      } else {
@@ -196,15 +210,25 @@ export class AuthHandler {
                 if (authSucess == 200) {
                     localStorage.setItem('idToken', idToken);
                     const uid = data.uid;
+                    const plan_backend = data.plan;
+                    const email = data.email;
+                    const phone = data.phone;
+                    localStorage.setItem('email', email);
+                    localStorage.setItem('phone', phone);
+                    localStorage.setItem('plan_backend', plan_backend);
                     if (btn.id === 'google-loginPopup') {
-                      window.location.href = '/dashboard';
+                      if (plan_backend === 'Free') {
+                        window.location.href = '/dashboard/';
+                      } else {
+                        window.location.href = '/dashboard/config';
+                      }
                     }
                     else if (btn.id === 'google-signupPopup') {
-                      const plan = localStorage.getItem('plan');
-                      if (plan === 'basic') {
+                      const plan_selected = localStorage.getItem('plan_selected');
+                      if (plan_selected === 'basic') {
                         url = 'https://buy.stripe.com/6oU5kCdM5gsceHh0lz9MY00?client_reference_id=' + uid;
                         window.location.href = url  ;
-                      } else if (plan === 'pro') {
+                      } else if (plan_selected === 'pro') {
                         url = 'https://buy.stripe.com/6oU8wOazT4JufLl0lz9MY01?client_reference_id=' + uid;
                         window.location.href = url;
                       }
