@@ -23,7 +23,7 @@ export class ApiService {
 export class backendService {
   /* TODO: Refatorar: Este URL ngrok é temporário. 
   Substituir pelo URL de produção do backend quando disponível. */
-  static backendUrl = 'https://5851-2804-12a0-5005-c200-35f1-63e0-a86a-e924.ngrok-free.app';
+  static backendUrl = 'https://d311-2804-12a0-5005-c200-20ee-c070-dbf6-ce4f.ngrok-free.app';
 
   static async login(idToken) {
     const response = await fetch(this.backendUrl + '/auth/login/', {
@@ -38,7 +38,7 @@ export class backendService {
   }
 
   static async login_google(idToken) {
-    const response = await fetch(this.backendUrl + '/auth/login_google/', {
+    const response = await fetch(this.backendUrl + 'auth/login/google/', {
       method: 'POST',
       // TODO: Refatorar: Este cabeçalho é específico para ngrok gratuito. Remover em produção.
       headers: { 'ngrok-skip-browser-warning': 'true' },
