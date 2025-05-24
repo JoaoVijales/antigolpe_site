@@ -1,0 +1,140 @@
+
+.user-menu {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.user-name {
+  color: var(--text-color);
+}
+
+.logout-button {
+  font-family: "SegoeUi-Semibold", sans-serif;
+  font-size: 1rem;
+  font-weight: 500;
+  padding: 0.5rem 2rem;
+  border: 2px solid var(--primary-color);
+  background: none;
+  color: var(--primary-color);
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.logout-button:hover {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+
+
+.title-card {
+  font-family: "SegoeUi-Semibold", sans-serif;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--primary-color);
+}
+
+
+.card_form {
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3rem;
+  flex-shrink: 0;
+  position: relative;
+  box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.15);
+}
+
+.card-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.cta-buton {
+  width: 100%;
+}
+.text-form {
+  font-family: "SegoeUi-Regular", sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
+  color: var(--text-color);
+}
+.form-group {
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+
+.form-basic {
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2rem;
+  margin-bottom: 6rem;
+}
+
+.config {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 4rem;
+  margin-bottom: 10rem;
+}
+
+
+.card-content-config {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.card-item-config {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.5rem;
+}
+
+
+.card_config {
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  flex-shrink: 0;
+  position: relative;
+  box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.15);
+}
+
+.text-config {
+  font-family: "SegoeUi-Regular", sans-serif;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--primary-color);
+}
+
+.card-item-value {
+  font-family: "SegoeUi-Regular", sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
+  color: var(--text-color);
+}
