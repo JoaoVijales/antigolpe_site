@@ -38,7 +38,7 @@ export class backendService {
   }
 
   static async login_google(idToken) {
-    const response = await fetch(this.backendUrl + 'auth/login/google/', {
+    const response = await fetch(this.backendUrl + '/auth/login/google/', {
       method: 'POST',
       // TODO: Refatorar: Este cabeçalho é específico para ngrok gratuito. Remover em produção.
       headers: { 'ngrok-skip-browser-warning': 'true' },

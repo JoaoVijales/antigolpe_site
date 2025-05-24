@@ -80,12 +80,18 @@ export class PopupHandler {
                 e.preventDefault();
                 // Modificado para usar button.dataset.plan
                 const plan_selected = button.dataset.plan;
+                const uid = localStorage.getItem('uid');
                 const id_button = button.id;
                 if (id_button === 'dashboard') {
-                    if (plan_selected === 'basic') {
-                        window.location.href = 'https://buy.stripe.com/6oU5kCdM5gsceHh0lz9MY00';
-                    } else if (plan_selected === 'pro') {
-                        window.location.href = '/https://buy.stripe.com/6oU8wOazT4JufLl0lz9MY01';
+                    if (uid) {
+                        if (plan_selected === 'basic') {
+                            window.location.href = 'https://buy.stripe.com/6oU5kCdM5gsceHh0lz9MY00?client_reference_id=' + uid;
+                        } else if (plan_selected === 'pro') {
+                            window.location.href = 'https://buy.stripe.com/6oU8wOazT4JufLl0lz9MY01?client_reference_id=' + uid;
+                        }
+                    }
+                    else {
+                        this.openSignupPopup();
                     }
                 }
                 else if (plan_selected === 'basic') {

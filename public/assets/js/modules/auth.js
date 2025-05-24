@@ -162,6 +162,8 @@ export class AuthHandler {
                      const [authSucess, data] = await backendService.register(idToken);
                      const email = data.email;
                      localStorage.setItem('email', email);
+                     const uid = data.uid;
+                     localStorage.setItem('uid', uid);
                      if (authSucess) {
                         localStorage.setItem('idToken', idToken);
 
@@ -169,9 +171,9 @@ export class AuthHandler {
                         // TODO: Implementar redirecionamento para uma página autenticada
                         const plan_selected = localStorage.getItem('plan_selected');
                         if (plan_selected === 'basic') {
-                          window.location.href = 'https://buy.stripe.com/6oU5kCdM5gsceHh0lz9MY00';
+                          window.location.href = 'https://buy.stripe.com/6oU5kCdM5gsceHh0lz9MY00?client_reference_id=' + uid;
                         } else if (plan_selected === 'pro') {
-                          window.location.href = '/https://buy.stripe.com/6oU8wOazT4JufLl0lz9MY01';
+                          window.location.href = 'https://buy.stripe.com/6oU8wOazT4JufLl0lz9MY01?client_reference_id=' + uid;
                         }
                         else {
                           window.location.href = '/dashboard/';
@@ -229,10 +231,10 @@ export class AuthHandler {
                     else if (btn.id === 'google-signupPopup') {
                       const plan_selected = localStorage.getItem('plan_selected');
                       if (plan_selected === 'basic') {
-                        url = 'https://buy.stripe.com/6oU5kCdM5gsceHh0lz9MY00?client_reference_id=' + uid;
+                        const url = 'https://buy.stripe.com/6oU5kCdM5gsceHh0lz9MY00?client_reference_id=' + uid;
                         window.location.href = url  ;
                       } else if (plan_selected === 'pro') {
-                        url = 'https://buy.stripe.com/6oU8wOazT4JufLl0lz9MY01?client_reference_id=' + uid;
+                        const url = 'https://buy.stripe.com/6oU8wOazT4JufLl0lz9MY01?client_reference_id=' + uid;
                         window.location.href = url;
                       }
                       else {
