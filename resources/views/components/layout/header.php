@@ -4,7 +4,7 @@
     <div class="menu-logo">
       <img class="logo-icon" src="<?= App\Utils\View::asset('images/logo-icon0.png') ?>" alt="Logo AntiGolpe" />
       <div class="logo-name">
-        <h1 class="logo-name-text">AntiGolpe</h1>
+        <h1 class="logo-name-text">É Cilada Bot!</h1>
       </div>
     </div>
     <ul class="menu-nav">

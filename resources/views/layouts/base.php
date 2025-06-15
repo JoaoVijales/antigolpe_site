@@ -3,10 +3,10 @@
 <html lang="pt-BR">
 <head>
   <?= View::render('components/head', [
-    'title' => $title ?? 'AntiGolpe',
+    'title' => $title ?? 'É Cilada Bot',
     'meta' => [
       'description' => 'Verifique anúncios em segundos e evite cair em golpes',
-      'keywords' => 'anti golpe, verificação de anúncios, segurança online'
+      'keywords' => 'anti golpe, verificação de anúncios, segurança online, É cilada bot, golpes online, eciladabot',
     ]
   ]) ?>
   

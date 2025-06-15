@@ -1,8 +1,13 @@
 :root {
-  --primary-color: #1eab67;
-  --text-color: #5c5c5c;
-  --heading-color: #000000;
-  --spacing-unit: 8px;
+  --primary-color: #FFD400;
+  --primary-dark: #066955;
+  --text-color: #FFFFFF;
+  --text-secondary: #5c5c5c;
+  --background: #1E1E1E;
+  --color-yellow: #FFD400;
+  --color-blue: #3BA6FF;
+  --color-gray: #CCCCCC;
+  --secundary-color: #2b2b2b;
 }
 
 a,
@@ -33,7 +38,9 @@ menu, ol, ul {
 
 
 
-
+body {
+    background-color: var(--background);
+}
 
 
 .page,
@@ -41,7 +48,7 @@ menu, ol, ul {
   box-sizing: border-box;
 }
 .page {
-  background: #ffffff;
+  background: var(--background);
   display: flex;
   flex-direction: column;
   gap: 150px;
@@ -65,7 +72,7 @@ menu, ol, ul {
   right: 0;
   overflow: hidden;
   z-index: 1;
-  background-color: #ffffff;
+  background-color: var(--background);
 }
 .menu-logo {
   display: flex;
@@ -95,7 +102,7 @@ menu, ol, ul {
   position: relative;
 }
 .logo-name-text {
-  color: #000000;
+  color: var(--color-yellow);
   text-align: left;
   font-family: "SegoeUi-Semibold", sans-serif;
   font-size: 20px;
@@ -121,7 +128,7 @@ menu, ol, ul {
   position: relative;
 }
 .nav-link-text {
-  color: #000000;
+  color: var(--color-gray);
   text-align: left;
   font-family: "SegoeUi-Regular", sans-serif;
   font-size: 16px;
@@ -129,16 +136,16 @@ menu, ol, ul {
   position: relative;
 }
 .nav-link-text:hover {
-  color: #1eab67;
+  color: var(--color-yellow);
 }
 .nav-link-text:active {
-  color: #1eab67;
+  color: var(--color-yellow);
 }
 .nav-link-text:focus {
-  color: #1eab67;
+  color: var(--color-yellow);
 }
 .nav-link-text:visited {
-  color: #1eab67;
+  color: var(--color-yellow);
 }
 
 
@@ -154,7 +161,7 @@ menu, ol, ul {
   position: relative;
 }
 .hero {
-  background: radial-gradient(circle at center bottom, rgba(225, 228, 233, 0.5) -16%, rgba(255, 255, 255, 1) 65%);
+  background: var(--background);
   padding: 64px 200px 64px 200px;
   display: flex;
   flex-direction: row;
@@ -188,7 +195,7 @@ menu, ol, ul {
   position: relative;
 }
 .hero-title {
-  color: #000000;
+  color: var(--color-yellow);
   text-align: left;
   font-family: "SegoeUi-Semibold", sans-serif;
   font-size: 2.1rem;
@@ -207,7 +214,7 @@ menu, ol, ul {
   position: relative;
 }
 .text {
-  color: #5c5c5c;
+  color: var(--color-gray);
   text-align: left;
   font-family: "SegoeUi-Semibold", sans-serif;
   font-size: 20px;
@@ -226,8 +233,8 @@ menu, ol, ul {
   position: relative;
 }
 .cta-buton {
-  background: #1eab67;
-  border-radius: 8px;
+    border: 1px solid var(--color-blue);
+  border-radius: 4px;
   padding: 12px 24px 12px 24px;
   display: flex;
   flex-direction: row;
@@ -238,14 +245,28 @@ menu, ol, ul {
   position: relative;
   box-shadow: 2px 4px 4px 0px rgba(0, 0, 0, 0.25);
   overflow: hidden;
+  transition: all 0.2s ease-in-out;
 }
 .button-text  {
-  color: #ffffff;
+  color: var(--color-blue);
   text-align: left;
   font-family: "SegoeUi-Semibold", sans-serif;
   font-size: 1rem;
   font-weight: 600;
   position: relative;
+  transition: all 0.2s ease-in-out;
+}
+.cta-buton:hover {
+    border-color: var(--color-yellow);
+  background-color: var(--color-yellow);
+  transition: all 0.3s ease-in-out;
+}
+.cta-buton:active {
+    border-color: var(--color-yellow);
+  background-color: var(--color-yellow);
+}
+.cta-buton:hover span {
+    color: var(--background);
 }
 .hero-img {
   display: flex;
@@ -290,7 +311,7 @@ menu, ol, ul {
   justify-content: center;
   align-self: stretch;
   flex-shrink: 0;
-  color: #000000;
+  color: var(--color-yellow);
   text-align: center;
   font-family: "SegoeUi-Semibold", sans-serif;
   font-size: 1.5rem;
@@ -319,7 +340,7 @@ menu, ol, ul {
   position: relative;
 }
 .features-card {
-  background: #ffffff;
+  background: var(--secundary-color);
   border-radius: 8px;
   padding: 8px;
   display: flex;
@@ -333,6 +354,7 @@ menu, ol, ul {
   position: relative;
   box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.15);
 }
+
 .anlize-icon {
   flex-shrink: 0;
   width: 32px;
@@ -343,7 +365,7 @@ menu, ol, ul {
 }
 .text2 {
   padding-inline: 2rem;
-  color: #5c5c5c;
+  color: var(--color-gray);
   text-align: center;
   font-family: "SegoeUi-Semibold", sans-serif;
   font-size: 1rem;
@@ -380,8 +402,10 @@ menu, ol, ul {
   position: relative;
 }
 
+.menssage-svg{
+    margin-top: 2rem;
+}
 .menssage-icon {
-  background: #ffffff;
   padding: 31px 0px 0px 0px;
   display: flex;
   flex-direction: row;
@@ -392,7 +416,7 @@ menu, ol, ul {
   position: relative;
 }
 .text3 {
-  color: #5c5c5c;
+  color: var(--color-gray);
   text-align: center;
   font-family: "SegoeUi-Semibold", sans-serif;
   font-size: 1rem;
@@ -445,7 +469,7 @@ menu, ol, ul {
 .card {
   max-width: 18rem;
   min-width: 18rem;
-  background: #ffffff;
+  background: var(--secundary-color);
   border-radius: 8px;
   padding: 2.5rem;
   display: flex;
@@ -470,7 +494,7 @@ menu, ol, ul {
   position: relative;
 }
 .plan-title {
-  color: #000000;
+  color: var(--color-gray);
   text-align: center;
   font-family: "SegoeUi-Semibold", sans-serif;
   font-size: 28px;
@@ -489,7 +513,7 @@ menu, ol, ul {
   position: relative;
 }
 .text-price {
-  color: #000000;
+  color: var(--text-color);
   text-align: center;
   position: relative;
 }
@@ -504,7 +528,7 @@ menu, ol, ul {
   font-weight: 700;
 }
 .text-cents {
-  color: #000000;
+  color: var(--text-color);
   text-align: center;
   font-family: "Roboto-Bold", sans-serif;
   font-size: 24px;
@@ -574,7 +598,7 @@ menu, ol, ul {
 
 .plan-benefit {
   max-width: 203px;
-  color: #5c5c5c;
+  color: var(--color-gray);
   text-align: center;
   font-family: "SegoeUi-Semibold", sans-serif;
   font-size: 0.85rem;
@@ -586,7 +610,7 @@ menu, ol, ul {
 
 .plan-benefit2 {
   max-width: 203px;
-  color: #5c5c5c;
+  color: var(--color-gray);
   text-align: center;
   font-family: "SegoeUi-Semibold", sans-serif;
   font-size: 0.85rem;
@@ -628,7 +652,7 @@ menu, ol, ul {
   position: relative;
 }
 .faq-content p {
-  color: #5c5c5c;
+  color: var(--color-gray);
   text-align: left;
   font-family: "SegoeUi-Semibold", sans-serif;
   font-size: 1rem;
@@ -637,7 +661,7 @@ menu, ol, ul {
 }
 
 .faq-content li {
-  color: #5c5c5c;
+  color: var(--color-gray);
   text-align: left;
   font-family: "SegoeUi-Semibold", sans-serif;
   font-size: 1rem;
@@ -646,7 +670,7 @@ menu, ol, ul {
 }
 
 .faq-title {
-  color: #000000;
+  color: var(--color-yellow);
   text-align: left;
   font-family: "SegoeUi-Semibold", sans-serif;
   font-size: 24px;
@@ -666,7 +690,7 @@ menu, ol, ul {
 /* Footer */
 
 .footer {
-  background: #1eab67;
+  background: var(--color-blue);
   padding: 64px 150px 1rem 150px;
   display: flex;
   flex-direction: column;
@@ -716,7 +740,7 @@ menu, ol, ul {
   position: relative;
 }
 .footer-title {
-  color: #ffffff;
+  color: var(--background);
   text-align: left;
   font-family: "Inter-ExtraBold", sans-serif;
   font-size: 24px;
@@ -724,7 +748,7 @@ menu, ol, ul {
   position: relative;
 }
 .footer-text {
-  color: #ffffff;
+  color: var(--background);
   text-align: left;
   font-family: "Inter-Medium", sans-serif;
   font-size: 16px;
@@ -732,7 +756,7 @@ menu, ol, ul {
   position: relative;
 }
 .email {
-  color: #ffffff;
+  color: var(--background);
   text-align: left;
   font-family: "Inter-ExtraBold", sans-serif;
   font-size: 0.85rem;
@@ -740,7 +764,23 @@ menu, ol, ul {
   position: relative;
 }
 .telefone {
-  color: #ffffff;
+  color: var(--background);
+  text-align: left;
+  font-family: "Inter-ExtraBold", sans-serif;
+  font-size: 0.85rem;
+  font-weight: 800;
+  position: relative;
+}
+.telefone a {
+  color: var(--secundary-color);
+  text-align: left;
+  font-family: "Inter-ExtraBold", sans-serif;
+  font-size: 0.85rem;
+  font-weight: 800;
+  position: relative;
+}
+.email a {
+  color: var(--secundary-color);
   text-align: left;
   font-family: "Inter-ExtraBold", sans-serif;
   font-size: 0.85rem;
@@ -804,7 +844,7 @@ menu, ol, ul {
   position: relative;
 }
 .rights-text {
-  color: #ffffff;
+  color: var(--background);
   text-align: left;
   font-family: "Inter-ExtraBold", sans-serif;
   font-size: 0.75rem;
@@ -831,7 +871,7 @@ menu, ol, ul {
 }
 
 .popup-content {
-  background: white;
+  background: var(--background);
   padding: 2rem;
   border-radius: 8px;
   width: 90%;
@@ -848,13 +888,14 @@ menu, ol, ul {
   background: none;
   border: none;
   cursor: pointer;
-  color: #666;
+  color: var(--text-color);
 }
 
 .popup-title {
+    
   text-align: center;
   margin-bottom: 1.5rem;
-  color: var(--heading-color);
+  color: var(--primary-color);
   font-size: 1.5rem;
   font-family: "Inter-ExtraBold", sans-serif;
 }
@@ -865,19 +906,21 @@ menu, ol, ul {
 
   width: 100%;
   padding: 0.75rem;
-  border: 1px solid #ddd;
+  border: 1px solid var(--primary-color);
   border-radius: 4px;
-  background: white;
+  background: var(--background);
   display: flex;
   align-items: center;
   justify-content: space-around;
   gap: 0.5rem;
   cursor: pointer;
   transition: background-color 0.3s;
+  color: var(--primary-color);
 }
 
 .google-btn:hover {
-  background-color: #f5f5f5;
+  background-color: var(--primary-color);
+  color: var(--background);
 }
 
 .google-icon {
@@ -899,7 +942,7 @@ menu, ol, ul {
   top: 50%;
   width: 45%;
   height: 1px;
-  background-color: #ddd;
+  background-color: var(--secundary-color);
 }
 
 .divider::before {
@@ -911,9 +954,9 @@ menu, ol, ul {
 }
 
 .divider span {
-  background: white;
+  background: var(--background);
   padding: 0 1rem;
-  color: #666;
+  color: var(--color-gray);
 }
 
 .form-group {
@@ -923,15 +966,16 @@ menu, ol, ul {
 .form-group label {
   display: block;
   margin-bottom: 0.5rem;
-  color: var(--text-color);
+  color: var(--color-gray);
 }
 
 .form-group input {
   width: 100%;
   padding: 0.75rem;
-  border: 1px solid #ddd;
+  border: 1px solid var(--primary-color);
   border-radius: 4px;
   font-size: 1rem;
+  color: var(--color-gray);
 }
 
 .form-group input:focus {
@@ -942,9 +986,8 @@ menu, ol, ul {
 .submit-btn {
   width: 100%;
   padding: 0.75rem;
-  background-color: var(--primary-color);
-  color: white;
-  border: none;
+  color: var(--color-blue);
+  border: 1px solid var(--color-blue);
   border-radius: 4px;
   font-size: 1rem;
   cursor: pointer;
@@ -952,20 +995,27 @@ menu, ol, ul {
 }
 
 .submit-btn:hover {
-  background-color: #1a9a5d;
+  background-color: var(--primary-color);
+  color: var(--background);
+  border-color: var(--primary-color);
 }
 
 .login-link,
 .signup-link {
   text-align: center;
   margin-top: 1rem;
-  color: var(--text-color);
+  color: var(--color-gray);
 }
 
 .login-link a,
 .signup-link a {
-  color: var(--primary-color);
+  color: var(--color-blue);
   text-decoration: underline;
+}
+
+.signup-link a:hover,
+.login-link a:hover {
+  color: var(--primary-color);
 }
 
 /* Estilos do Popup de Feedback */
